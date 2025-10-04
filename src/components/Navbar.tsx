@@ -12,7 +12,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
 
   const navLinks = [
     { label: "HOME", href: "#" },
-    { label: "NEWS", href: "#", active: true },
+    { label: "NEWS", href: "#" },
     { label: "PRODUCTS", href: "#" },
     { label: "OFFERS", href: "#" },
     { label: "SHOP", href: "#" },
@@ -54,11 +54,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
                   <a
                     key={link.label}
                     href={link.href}
-                    className={`text-[16px] transition-colors ${
-                      link.active
-                        ? "text-site-blue font-bold"
-                        : "text-site-blue hover:text-orange"
-                    }`}
+                    className="text-[16px] transition-colors text-site-blue hover:text-orange"
                   >
                     {link.label}
                   </a>
@@ -66,57 +62,8 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
               </div>
             </div>
 
-            {/* Icons and Actions */}
-            <div className="flex items-center gap-4">
-              {/* Badge Icons */}
-              {/* <div className="hidden md:flex items-center gap-3"> */}
-              {/* <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer group">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 6v6l4 2" />
-                  </svg>
-                </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer group">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer group">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </div>
-              </div> */}
-
+            {/* Icons and Actions - Desktop Only */}
+            <div className="hidden lg:flex items-center gap-4">
               {/* Search */}
               <button className="p-2 rounded-lg hover:bg-slate-100 hover:scale-110 transition-all duration-200 group">
                 <svg
@@ -168,7 +115,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
                 >
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
-                <span className="absolute top-0 right-0 bg-gradient-to-br from-site-blue to-dark-blue text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-semibold shadow-md">
+                <span className="absolute top-0 right-0 bg-site-blue text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-semibold shadow-md">
                   0
                 </span>
               </button>
@@ -184,20 +131,23 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-site-blue group-hover:text-sky-blue-600 transition-colors"
+                  className="text-site-blue group-hover:text-dark-blue transition-colors"
                 >
                   <circle cx="9" cy="21" r="1" />
                   <circle cx="20" cy="21" r="1" />
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                 </svg>
-                <span className="absolute top-0 right-0 bg-gradient-to-br from-site-blue to-dark-blue text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-semibold shadow-md">
+                <span className="absolute top-0 right-0 bg-site-blue text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-semibold shadow-md">
                   0
                 </span>
               </button>
+            </div>
 
+            {/* Mobile Menu Button Container */}
+            <div className="lg:hidden flex items-center gap-4">
               {/* Mobile menu button */}
               <button
-                className="lg:hidden p-2 rounded-lg hover:bg-slate-100 hover:scale-110 transition-all duration-200"
+                className="p-2 rounded-lg hover:bg-slate-100 hover:scale-110 transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 <svg
@@ -232,19 +182,105 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
           {isMobileMenuOpen && (
             <div className="lg:hidden mt-4 pb-4 border-t border-light-300 pt-4">
               <div className="flex flex-col gap-3">
+                {/* Navigation Links */}
                 {navLinks.map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
-                    className={`text-[16px] transition-colors ${
-                      link.active
-                        ? "text-green font-medium"
-                        : "text-dark-900 hover:text-green"
-                    }`}
+                    className="text-[16px] transition-colors text-dark-900 hover:text-green"
                   >
                     {link.label}
                   </a>
                 ))}
+
+                {/* Mobile Icon Menu Items */}
+                <div className="mt-4 pt-4 border-t border-light-300">
+                  {/* Search */}
+                  <button className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-slate-100 transition-all duration-200 group">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-site-blue group-hover:text-dark-blue transition-colors"
+                    >
+                      <circle cx="11" cy="11" r="8" />
+                      <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    <span className="text-dark-900 font-medium">Search</span>
+                  </button>
+
+                  {/* Profile */}
+                  <button className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-slate-100 transition-all duration-200 group">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-site-blue group-hover:text-dark-blue transition-colors"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span className="text-dark-900 font-medium">Profile</span>
+                  </button>
+
+                  {/* Wishlist */}
+                  <button className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-slate-100 transition-all duration-200 group">
+                    <div className="relative">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-site-blue group-hover:text-dark-blue group-hover:fill-dark-blue transition-all"
+                      >
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      </svg>
+                      <span className="absolute -top-1 -right-1 bg-gradient-to-br from-site-blue to-dark-blue text-white text-[8px] min-w-[14px] h-[14px] rounded-full flex items-center justify-center font-semibold shadow-md">
+                        0
+                      </span>
+                    </div>
+                    <span className="text-dark-900 font-medium">Wishlist</span>
+                  </button>
+
+                  {/* Cart */}
+                  <button className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-slate-100 transition-all duration-200 group">
+                    <div className="relative">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-site-blue group-hover:text-sky-blue-600 transition-colors"
+                      >
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                      </svg>
+                      <span className="absolute -top-1 -right-1 bg-gradient-to-br from-site-blue to-dark-blue text-white text-[8px] min-w-[14px] h-[14px] rounded-full flex items-center justify-center font-semibold shadow-md">
+                        0
+                      </span>
+                    </div>
+                    <span className="text-dark-900 font-medium">Cart</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}
