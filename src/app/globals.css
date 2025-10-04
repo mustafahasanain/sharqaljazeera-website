@@ -13,9 +13,10 @@
   --color-light-400: #cccccc;
 
   /* Supporting colors */
-  --color-green: #007d48;
-  --color-red: #d33918;
-  --color-orange: #d37918;
+  --color-sky-blue: #0066cc;
+  --color-dark-blue: #000066;
+  --color-site-blue: #446084;
+  --color-orange: #ff6633;
 
   /* Font family */
   --font-jost: "Jost", sans-serif;

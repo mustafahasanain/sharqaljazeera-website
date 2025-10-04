@@ -1,0 +1,255 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+
+interface NavbarProps {
+  logoSrc?: string;
+}
+
+export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { label: "HOME", href: "#" },
+    { label: "NEWS", href: "#", active: true },
+    { label: "PRODUCTS", href: "#" },
+    { label: "OFFERS", href: "#" },
+    { label: "SHOP", href: "#" },
+  ];
+
+  return (
+    <nav className="w-full">
+      {/* Top bar */}
+      <div className="bg-dark-900 text-light-100 px-4 py-2 text-center">
+        "NETRIX" New Sharq Aljazeera Exclusive Brand!
+      </div>
+
+      {/* Main navbar */}
+      <div className=" text-dark-blue">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between gap-8">
+            {/* Logo and Menu - Float Left */}
+            <div className="flex items-center gap-8 flex-1">
+              {/* Logo */}
+              <a href="/" className="flex items-center gap-2 flex-shrink-0">
+                <div>
+                  <Image
+                    src="/logo.webp"
+                    alt="Sharq Aljazeera Logo"
+                    width={170}
+                    height={150}
+                    className="rounded-md"
+                    priority // ensures logo loads instantly
+                  />
+                  <div className="text-dark-700 text-[12px]">
+                    Cummunication & Internet
+                  </div>
+                </div>
+              </a>
+
+              {/* Desktop Navigation Links - Next to Logo */}
+              <div className="hidden lg:flex items-center gap-6">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className={`text-[16px] transition-colors ${
+                      link.active
+                        ? "text-site-blue font-bold"
+                        : "text-site-blue hover:text-orange"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Icons and Actions */}
+            <div className="flex items-center gap-4">
+              {/* Badge Icons */}
+              {/* <div className="hidden md:flex items-center gap-3"> */}
+              {/* <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer group">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                </div>
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer group">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer group">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                </div>
+              </div> */}
+
+              {/* Search */}
+              <button className="p-2 rounded-lg hover:bg-slate-100 hover:scale-110 transition-all duration-200 group">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-site-blue group-hover:text-dark-blue transition-colors"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </button>
+
+              {/* User Profile */}
+              <button className="p-2 rounded-lg hover:bg-slate-100 hover:scale-110 transition-all duration-200 group">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-site-blue group-hover:text-dark-blue transition-colors"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </button>
+
+              {/* Wishlist */}
+              <button className="relative p-2 rounded-lg hover:bg-slate-100 hover:scale-110 transition-all duration-200 group">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-site-blue group-hover:text-dark-blue group-hover:fill-dark-blue transition-all"
+                >
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                <span className="absolute top-0 right-0 bg-gradient-to-br from-site-blue to-dark-blue text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-semibold shadow-md">
+                  0
+                </span>
+              </button>
+
+              {/* Cart */}
+              <button className="relative p-2 rounded-lg hover:bg-slate-100 hover:scale-110 transition-all duration-200 group">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-site-blue group-hover:text-sky-blue-600 transition-colors"
+                >
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+                <span className="absolute top-0 right-0 bg-gradient-to-br from-site-blue to-dark-blue text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-semibold shadow-md">
+                  0
+                </span>
+              </button>
+
+              {/* Mobile menu button */}
+              <button
+                className="lg:hidden p-2 rounded-lg hover:bg-slate-100 hover:scale-110 transition-all duration-200"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-slate-600"
+                >
+                  {isMobileMenuOpen ? (
+                    <>
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </>
+                  ) : (
+                    <>
+                      <line x1="3" y1="12" x2="21" y2="12" />
+                      <line x1="3" y1="6" x2="21" y2="6" />
+                      <line x1="3" y1="18" x2="21" y2="18" />
+                    </>
+                  )}
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile menu */}
+          {isMobileMenuOpen && (
+            <div className="lg:hidden mt-4 pb-4 border-t border-light-300 pt-4">
+              <div className="flex flex-col gap-3">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className={`text-[16px] transition-colors ${
+                      link.active
+                        ? "text-green font-medium"
+                        : "text-dark-900 hover:text-green"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+}
