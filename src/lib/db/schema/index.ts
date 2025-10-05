@@ -4,6 +4,7 @@ export * from './session';
 export * from './account';
 export * from './verification';
 export * from './guest';
+export * from './passwordReset';
 
 // Product-related schemas
 export * from './products';

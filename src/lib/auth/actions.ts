@@ -4,9 +4,10 @@ import {cookies, headers} from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { guest } from "@/lib/db/schema/index";
-import { and, eq, lt } from "drizzle-orm";
+import { guest, passwordReset, user } from "@/lib/db/schema/index";
+import { and, eq, lt, gt } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { hash } from "@node-rs/argon2";
 
 const COOKIE_OPTIONS = {
   httpOnly: true as const,
@@ -94,15 +95,19 @@ export async function signIn(formData: FormData) {
 
   const data = signInSchema.parse(rawData);
 
-  const res = await auth.api.signInEmail({
-    body: {
-      email: data.email,
-      password: data.password,
-    },
-  });
+  try {
+    const res = await auth.api.signInEmail({
+      body: {
+        email: data.email,
+        password: data.password,
+      },
+    });
 
-  await migrateGuestToUser();
-  return { ok: true, userId: res.user?.id };
+    await migrateGuestToUser();
+    return { ok: true, userId: res.user?.id };
+  } catch (error: any) {
+    return { ok: false, error: error.message || "Invalid email or password" };
+  }
 }
 
 export async function getCurrentUser() {
@@ -135,4 +140,115 @@ async function migrateGuestToUser() {
 
   await db.delete(guest).where(eq(guest.sessionToken, token));
   (await cookieStore).delete("guest_session");
+}
+
+// Generate a random token for password reset
+function generateResetToken(): string {
+  return randomUUID() + randomUUID().replace(/-/g, '');
+}
+
+const requestPasswordResetSchema = z.object({
+  email: emailSchema,
+});
+
+export async function requestPasswordReset(formData: FormData) {
+  const rawData = {
+    email: formData.get('email') as string,
+  };
+
+  try {
+    const data = requestPasswordResetSchema.parse(rawData);
+
+    // Find user by email
+    const [existingUser] = await db
+      .select()
+      .from(user)
+      .where(eq(user.email, data.email))
+      .limit(1);
+
+    // For security, don't reveal if user exists or not
+    if (!existingUser) {
+      return { ok: true };
+    }
+
+    // Generate reset token
+    const token = generateResetToken();
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+    // Delete any existing reset tokens for this user
+    await db.delete(passwordReset).where(eq(passwordReset.userId, existingUser.id));
+
+    // Create new reset token
+    await db.insert(passwordReset).values({
+      userId: existingUser.id,
+      token,
+      expiresAt,
+    });
+
+    // Generate reset link
+    const resetLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/reset-password?token=${token}`;
+
+    // TODO: Send email with reset link
+    // For now, we'll log it (in production, you should send an email)
+    console.log(`Password reset link for ${data.email}:`);
+    console.log(resetLink);
+
+    return { ok: true };
+  } catch (error: any) {
+    return { ok: false, error: error.message || "Failed to process password reset request" };
+  }
+}
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  password: passwordSchema,
+});
+
+export async function resetPassword(formData: FormData) {
+  const rawData = {
+    token: formData.get('token') as string,
+    password: formData.get('password') as string,
+  };
+
+  try {
+    const data = resetPasswordSchema.parse(rawData);
+
+    // Find valid reset token
+    const [resetRecord] = await db
+      .select()
+      .from(passwordReset)
+      .where(
+        and(
+          eq(passwordReset.token, data.token),
+          gt(passwordReset.expiresAt, new Date())
+        )
+      )
+      .limit(1);
+
+    if (!resetRecord) {
+      return { ok: false, error: "Invalid or expired reset link" };
+    }
+
+    // Hash the new password
+    const hashedPassword = await hash(data.password, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    });
+
+    // Update password using better-auth's internal mechanism
+    await db.execute({
+      sql: `UPDATE account SET password = $1 WHERE user_id = $2 AND provider_id = 'credential'`,
+      args: [hashedPassword, resetRecord.userId],
+    });
+
+    // Delete the reset token
+    await db.delete(passwordReset).where(eq(passwordReset.id, resetRecord.id));
+
+    return { ok: true };
+  } catch (error: any) {
+    console.error("Password reset error:", error);
+    return { ok: false, error: error.message || "Failed to reset password" };
+  }
 }

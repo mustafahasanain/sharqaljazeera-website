@@ -15,6 +15,13 @@
       "when": 1759652464156,
       "tag": "0001_heavy_captain_flint",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1759689551289,
+      "tag": "0002_concerned_night_nurse",
+      "breakpoints": true
     }
   ]
 }

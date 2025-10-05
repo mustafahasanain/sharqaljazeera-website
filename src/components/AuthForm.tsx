@@ -8,31 +8,45 @@ interface AuthFormProps {
   mode: "signin" | "signup";
   onSubmit: (
     formData: FormData
-  ) => Promise<{ ok: boolean; userId?: string } | void>;
+  ) => Promise<{ ok: boolean; userId?: string; error?: string } | void>;
 }
 
 export default function AuthForm({ mode, onSubmit }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const isSignUp = mode === "signup";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
     const formData = new FormData(e.currentTarget);
 
     try {
       const result = await onSubmit(formData);
 
-      if (result?.ok) router.push("/");
+      if (result?.ok) {
+        router.push("/");
+      } else if (result?.error) {
+        setError(result.error);
+      }
     } catch (e) {
       console.log("error", e);
+      // setError("An unexpected error occurred. Please try again.");
+      setError("This email is already registered.");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-body text-red-600">{error}</p>
+        </div>
+      )}
+
       {isSignUp && (
         <div>
           <label
