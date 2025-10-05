@@ -42,7 +42,7 @@ export default function Card({
       : price;
   const content = (
     <article
-      className={`group rounded-xl bg-light-100 ring-1 ring-light-300 transition-colors hover:ring-dark-500 ${className}`}
+      className={`group flex h-full flex-col rounded-xl bg-light-100 ring-1 ring-light-300 transition-colors hover:ring-orange ${className}`}
     >
       <div className="relative aspect-square overflow-hidden rounded-t-xl bg-light-200">
         <Image
@@ -53,7 +53,7 @@ export default function Card({
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
-      <div className="p-4">
+      <div className="flex flex-1 flex-col p-4">
         <div className="mb-1 flex items-baseline justify-between gap-3">
           <h3 className="text-heading-3 text-dark-900">{title}</h3>
           {displayPrice && (
@@ -79,7 +79,7 @@ export default function Card({
     <Link
       href={href}
       aria-label={title}
-      className="block rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[--color-dark-500]"
+      className="block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[--color-dark-700]"
     >
       {content}
     </Link>
