@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface NavbarProps {
   logoSrc?: string;
@@ -22,7 +23,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
     <nav className="w-full">
       {/* Top bar */}
       <div className="bg-dark-900 text-light-100 px-4 py-2 text-center">
-        "NETRIX" New Sharq Aljazeera Exclusive Brand!
+        &quot;NETRIX&quot; New Sharq Aljazeera Exclusive Brand!
       </div>
 
       {/* Main navbar */}
@@ -32,7 +33,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
             {/* Logo and Menu - Float Left */}
             <div className="flex items-center gap-8 flex-1">
               {/* Logo */}
-              <a href="/" className="flex items-center gap-2 flex-shrink-0">
+              <Link href="/" className="flex items-center gap-2 flex-shrink-0">
                 <div>
                   <Image
                     src="/logo.webp"
@@ -46,7 +47,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
                     Cummunication & Internet
                   </div>
                 </div>
-              </a>
+              </Link>
 
               {/* Desktop Navigation Links - Next to Logo */}
               <div className="hidden lg:flex items-center gap-6">

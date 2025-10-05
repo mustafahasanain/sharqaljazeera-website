@@ -2,65 +2,50 @@ You are a senior full-stack engineer assigned to build a modern web application 
 
 ## 💼 Objective
 
-Build three responsive UI components — a **Navbar**, a **Reusable Card**, and a **Footer** — based on provided designs. These components will be used across the application, so they must follow consistent styling, responsive layout, and adhere to the application's theme and type system.
+Design and build fully responsive, styled authentication pages (Sign In and Sign Up) using a shared group layout. These pages must support email/password login, social sign-in buttons (Google and Apple), and follow the application’s theme and typography.
+
+The design should take inspiration from the attached layout and adapt it into this application’s brand identity, following the theme and typography defined in `src/app/globals.css`.
 
 ## 🧰 Structure
 
-- Use the tech stack present in project structure
-- Use typography and color palette defined in `src/app/globals.css`
-- All icons and images to be pulled from the `public/` folder
-- Folder Structure:
+- Use Next.js App Router and group layout feature for sign-in and sign-up pages.
+- Respect existing theme and typography in src/app/globals.css.
+- Folder structure:
   /src
+  ├── app/
+  │ ├── (auth)/
+  │ │ ├── layout.tsx ← shared layout
+  │ │ ├── sign-in/
+  │ │ │ └── page.tsx
+  │ │ └── sign-up/
+  │ │ └── page.tsx
   ├── components/
-  │ ├── Navbar.tsx
-  │ ├── Card.tsx
-  │ ├── Footer.tsx
+  │ ├── AuthForm.tsx
+  │ └── SocialProviders.tsx
+  ├── public/
 
 ## ✅ Tasks
 
-1. **Navbar**
-
-- Implement a responsive navigation bar
-- Include logo (from `/public`), links, and any mobile hamburger toggle
-- Use semantic HTML and accessibility best practices
-
-1. **Reusable Card**
-
-- Create a generic card component accepting props (title, description, image, etc)
-- Support various use-cases of a shoe
-- Responsive and theme-compliant
-
-1. **Footer**
-
-- Implement a footer with navigation links, social icons, and copyright
-- Should be responsive and mobile-first
-
-1. **Styling**
-
-- Use Tailwind CSS for all styling
-- Match colors, fonts, spacing with what's defined in `globals.css`
-
-1. **Code Quality**
-
-- Use TypeScript for all components
-- Ensure all components are properly typed and reusable
-- Follow DRY and modular principles
+- Create a layout in `/app/(auth)/layout.tsx` with proper structure, margins, and responsiveness.
+- Put/Move everything else in `/app/(root)/layout.tsx` file which will have its own shared layout.
+- Ensure the design feels cohesive across both pages.
+- Sign In and Sign Up pages should use common form components.
+- Create email/password inputs.
+- Add social sign-in buttons (Google, Apple) using icons from Lucide or public assets.
+- Style all components with Tailwind CSS using the theme in `globals.css`.
+- Make it Responsive.
+- Design must work well across devices.
+- Use mobile-first and accessible practices.
 
 ## 📦 Output Requirements
 
-- 3 standalone components in `src/components/`:
-  - `Navbar.tsx`
-  - `Card.tsx`
-  - `Footer.tsx`
-- Responsive and fully styled
-- Properly typed with props interfaces
-- Using assets from `public/`
-- Uses theme values from `globals.css`
-- Code is clean, readable, and production-ready
+- `/sign-in` and `/sign-up` pages with shared layout
+- Responsive, mobile-friendly, accessible forms
+- Reusable form and provider components
+- Assets must be sourced from `/public`
 
 ## 📝 Notes
 
-- Design reference has been attached (screenshots)
-- No need to wire up actual links or logic, just focus on UI/UX
-- Mobile-first responsiveness is critical
-- Follow component naming conventions and file structure used throughout the app
+- Keep UI modular and theme-aligned.
+- Focus is only on frontend (UI). Auth logic will be implemented separately.
+- Maintain clean code and proper folder structure.
