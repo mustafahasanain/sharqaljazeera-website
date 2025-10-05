@@ -8,3 +8,6 @@ export * from './passwordReset';
 
 // Product-related schemas
 export * from './products';
+
+// News-related schemas
+export * from './news';
