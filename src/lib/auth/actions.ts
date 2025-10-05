@@ -4,10 +4,10 @@ import {cookies, headers} from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { guest, passwordReset, user } from "@/lib/db/schema/index";
-import { and, eq, lt, gt } from "drizzle-orm";
+import { guest, passwordReset, user, account } from "@/lib/db/schema/index";
+import { and, eq, lt, gt, sql } from "drizzle-orm";
 import { randomUUID } from "crypto";
-import { hash } from "@node-rs/argon2";
+import { hashPassword } from "better-auth/crypto";
 
 const COOKIE_OPTIONS = {
   httpOnly: true as const,
@@ -190,8 +190,13 @@ export async function requestPasswordReset(formData: FormData) {
 
     // TODO: Send email with reset link
     // For now, we'll log it (in production, you should send an email)
-    console.log(`Password reset link for ${data.email}:`);
-    console.log(resetLink);
+    console.log(`\n${'='.repeat(80)}`);
+    console.log(`📧 PASSWORD RESET REQUEST`);
+    console.log(`${'='.repeat(80)}`);
+    console.log(`Email: ${data.email}`);
+    console.log(`Reset Link:`);
+    console.log(`\n${resetLink}\n`);
+    console.log(`${'='.repeat(80)}\n`);
 
     return { ok: true };
   } catch (error: any) {
@@ -229,19 +234,19 @@ export async function resetPassword(formData: FormData) {
       return { ok: false, error: "Invalid or expired reset link" };
     }
 
-    // Hash the new password
-    const hashedPassword = await hash(data.password, {
-      memoryCost: 19456,
-      timeCost: 2,
-      outputLen: 32,
-      parallelism: 1,
-    });
+    // Hash the new password using better-auth's hashing
+    const hashedPassword = await hashPassword(data.password);
 
-    // Update password using better-auth's internal mechanism
-    await db.execute({
-      sql: `UPDATE account SET password = $1 WHERE user_id = $2 AND provider_id = 'credential'`,
-      args: [hashedPassword, resetRecord.userId],
-    });
+    // Update password in the account table
+    await db
+      .update(account)
+      .set({ password: hashedPassword })
+      .where(
+        and(
+          eq(account.userId, resetRecord.userId),
+          eq(account.providerId, "credential")
+        )
+      );
 
     // Delete the reset token
     await db.delete(passwordReset).where(eq(passwordReset.id, resetRecord.id));
