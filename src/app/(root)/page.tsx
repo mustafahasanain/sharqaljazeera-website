@@ -9,7 +9,7 @@ const products = [
     subtitle: "Men's Shoes",
     meta: "6 Colour",
     price: 149.99,
-    imageSrc: "/shoes/shoe-1.jpg",
+    imageSrc: "/products/product-1.png",
     badge: { label: "New", tone: "orange" as const },
   },
   {
@@ -18,7 +18,7 @@ const products = [
     subtitle: "Men's Shoes",
     meta: "4 Colour",
     price: 129.99,
-    imageSrc: "/shoes/shoe-2.webp",
+    imageSrc: "/products/product-2.png",
     badge: { label: "Hot", tone: "red" as const },
   },
   {
@@ -27,7 +27,7 @@ const products = [
     subtitle: "Men's Shoes",
     meta: "6 Colour",
     price: 159.99,
-    imageSrc: "/shoes/shoe-3.webp",
+    imageSrc: "/products/product-3.png",
     badge: { label: "Trending", tone: "green" as const },
   },
   {
@@ -36,7 +36,7 @@ const products = [
     subtitle: "Men's Shoes",
     meta: "3 Colour",
     price: 139.99,
-    imageSrc: "/shoes/shoe-4.webp",
+    imageSrc: "/products/product-4.png",
   },
 ];
 

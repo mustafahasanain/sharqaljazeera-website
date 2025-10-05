@@ -40,7 +40,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
                     alt="Sharq Aljazeera Logo"
                     width={170}
                     height={150}
-                    className="rounded-md"
+                    className="rounded-md w-auto h-auto"
                     priority // ensures logo loads instantly
                   />
                   <div className="text-dark-700 text-[12px]">
