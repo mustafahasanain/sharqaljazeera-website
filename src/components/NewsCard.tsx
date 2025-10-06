@@ -3,9 +3,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export interface NewsCardProps {
-  id: string;
+  slug: string;
   title: string;
-  text: string;
+  description: string;
   imageUrl: string;
   date: string | Date;
   category?: string;
@@ -28,9 +28,9 @@ function truncateText(text: string, maxLength: number = 150): string {
 }
 
 export default function NewsCard({
-  id,
+  slug,
   title,
-  text,
+  description,
   imageUrl,
   date,
   category = "News",
@@ -41,46 +41,46 @@ export default function NewsCard({
 
   if (featured) {
     return (
-      <article className="group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-shadow hover:shadow-xl">
-        <div className="relative aspect-[16/9] overflow-hidden">
-          <Image
-            src={imageUrl}
-            alt={title}
-            fill
-            sizes="(min-width: 1280px) 1200px, 30vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            priority
-          />
-        </div>
-        <div className="p-8">
-          <div className="mb-4 flex items-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-blue-600 px-3 py-1 text-sm font-medium text-white">
-              {category}
-            </span>
-            {readingTime && (
-              <span className="text-sm text-dark-700">{readingTime}</span>
-            )}
+      <Link href={`/news/${slug}`} className="group block">
+        <article className="overflow-hidden rounded-2xl bg-white shadow-lg transition-shadow hover:shadow-xl">
+          <div className="relative aspect-[16/9] overflow-hidden">
+            <Image
+              src={imageUrl}
+              alt={title}
+              fill
+              sizes="(min-width: 1280px) 1200px, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              priority
+            />
           </div>
-          <h2 className="mb-4 text-3xl font-bold text-dark-900 transition-colors group-hover:text-blue-600">
-            {title}
-          </h2>
-          <p className="mb-6 text-base leading-relaxed text-dark-700">
-            {truncateText(text, 200)}
-          </p>
-          <Link
-            href={`/news/${id}`}
-            className="inline-flex items-center gap-2 font-medium text-blue-600 transition-colors hover:text-blue-700"
-          >
-            Read More
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </div>
-      </article>
+          <div className="p-8">
+            <div className="mb-4 flex items-center gap-3 text-sm text-dark-700">
+              <span>{formattedDate}</span>
+              {readingTime && (
+                <>
+                  <span>•</span>
+                  <span>{readingTime}</span>
+                </>
+              )}
+            </div>
+            <h2 className="mb-4 text-3xl font-bold text-dark-900 transition-colors group-hover:text-site-blue">
+              {title}
+            </h2>
+            <p className="mb-6 text-base leading-relaxed text-dark-700">
+              {truncateText(description, 200)}
+            </p>
+            <div className="inline-flex items-center gap-2 font-medium text-site-blue transition-colors group-hover:text-orange">
+              Read More
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </div>
+          </div>
+        </article>
+      </Link>
     );
   }
 
   return (
-    <Link href={`/news/${id}`} className="group block h-full">
+    <Link href={`/news/${slug}`} className="group block h-full">
       <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow transition-shadow hover:shadow-lg">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
@@ -92,19 +92,22 @@ export default function NewsCard({
           />
         </div>
         <div className="flex flex-1 flex-col p-6">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <span className="text-sm font-medium text-orange-600">
-              {category}
-            </span>
-            <span className="text-sm text-dark-700">{formattedDate}</span>
+          <div className="mb-3 flex items-center gap-3 text-sm text-dark-700">
+            <span>{formattedDate}</span>
+            {readingTime && (
+              <>
+                <span>•</span>
+                <span>{readingTime}</span>
+              </>
+            )}
           </div>
-          <h3 className="mb-3 text-xl font-bold text-dark-900 transition-colors group-hover:text-blue-600">
+          <h3 className="mb-3 text-xl font-bold text-dark-900 transition-colors group-hover:text-site-blue">
             {title}
           </h3>
           <p className="mb-4 flex-1 text-sm leading-relaxed text-dark-700">
-            {truncateText(text)}
+            {truncateText(description)}
           </p>
-          <div className="flex items-center gap-2 font-medium text-blue-600 transition-colors group-hover:text-blue-700">
+          <div className="flex items-center gap-2 font-medium text-site-blue transition-colors group-hover:text-orange">
             Read More
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </div>
