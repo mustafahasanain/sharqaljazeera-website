@@ -14,8 +14,8 @@ export default function Footer() {
     explore: {
       title: "Explore",
       links: [
-        { label: "Home", href: "#" },
-        { label: "News", href: "#" },
+        { label: "Home", href: "/" },
+        { label: "News", href: "/news" },
         { label: "Products", href: "#" },
         { label: "Offers", href: "#" },
         { label: "Shop", href: "#" },

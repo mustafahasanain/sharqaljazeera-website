@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavbarProps {
   logoSrc?: string;
@@ -10,10 +11,11 @@ interface NavbarProps {
 
 export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const navLinks = [
-    { label: "HOME", href: "#" },
-    { label: "NEWS", href: "#" },
+    { label: "HOME", href: "/" },
+    { label: "NEWS", href: "/news" },
     { label: "PRODUCTS", href: "#" },
     { label: "OFFERS", href: "#" },
     { label: "SHOP", href: "#" },
@@ -51,15 +53,25 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
 
               {/* Desktop Navigation Links - Next to Logo */}
               <div className="hidden lg:flex items-center gap-6">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="text-[16px] transition-colors text-site-blue hover:text-orange"
-                  >
-                    {link.label}
-                  </a>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  const isHome = link.label === "HOME";
+                  const shouldStyleActive = isActive && !isHome;
+
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className={`transition-colors ${
+                        shouldStyleActive
+                          ? "text-orange text-[18px] font-medium"
+                          : "text-[16px] text-site-blue hover:text-orange"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 
@@ -184,15 +196,25 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
             <div className="lg:hidden mt-4 pb-4 border-t border-light-300 pt-4">
               <div className="flex flex-col gap-3">
                 {/* Navigation Links */}
-                {navLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="text-[16px] transition-colors text-dark-900 hover:text-green"
-                  >
-                    {link.label}
-                  </a>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  const isHome = link.label === "HOME";
+                  const shouldStyleActive = isActive && !isHome;
+
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className={`transition-colors ${
+                        shouldStyleActive
+                          ? "text-orange text-[18px] font-medium"
+                          : "text-[16px] text-dark-900 hover:text-orange"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
 
                 {/* Mobile Icon Menu Items */}
                 <div className="mt-4 pt-4 border-t border-light-300">

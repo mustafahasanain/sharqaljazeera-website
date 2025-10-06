@@ -1,6 +1,8 @@
 import { NewsCard } from "@/components";
 import { newsData } from "@/data/news";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function NewsPage() {
   // Get all news posts ordered by date (newest first)
@@ -10,7 +12,9 @@ export default function NewsPage() {
   const [featuredPost, ...recentPosts] = newsPosts;
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <>
+      <Navbar />
+      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       {/* Featured News Section */}
       {featuredPost && (
         <section className="mb-16">
@@ -79,6 +83,8 @@ export default function NewsPage() {
           </p>
         </div>
       )}
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 }
