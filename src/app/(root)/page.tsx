@@ -2,6 +2,8 @@ import { Card } from "@/components";
 import HeroSlider from "@/components/HeroSlider";
 import { getCurrentUser } from "@/lib/auth/actions";
 
+export const dynamic = 'force-dynamic';
+
 const products = [
   {
     id: 1,

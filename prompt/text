@@ -1,104 +1,345 @@
-You are a senior full-stack engineer working on the sharqaljazeera-website built with Next.js 15 (App Router), TailwindCSS 4, Drizzle ORM + PostgreSQL, and Better Auth for authentication. The app uses TypeScript, Lucide React icons, and follows a clean, modular architecture.
+You are a senior full-stack engineer assigned to build a modern web application from scratch.
 
-## Objective
+## 💼 Objective
 
-Build a News page (/news) that publicly displays all admin-created news posts as responsive cards, each showing an image, date, title, and text preview.
+Design and implement robust, normalized **database schemas** using **Drizzle ORM** for a scalable eCommerce application. This includes user accounts, product catalog, filters, orders, and supporting features, all aligned with industry best practices for long-term scalability and clean code architecture.
 
-## Structure
+## 🧰 Structure
 
-Framework: Next.js 15 with App Router
+- Tech Stack:
+  - **ORM**: Drizzle ORM
+  - **Database**: PostgreSQL (hosted on Neon Serverless)
+  - **Language**: TypeScript
+  - **Validation**: Zod schema integration
+- Folder & File Structure:
+  /lib
+  └── db
+  ├── schema/
+  │ ├── users.ts
+  │ ├── addresses.ts
+  │ ├── products.ts
+  │ ├── variants.ts
+  │ ├── categories.ts
+  │ ├── collections.ts
+  │ ├── orders.ts
+  │ ├── carts.ts
+  │ ├── payments.ts
+  │ ├── coupons.ts
+  │ ├── wishlists.ts
+  │ ├── filters/
+  │ │ ├── brands.ts
+  │ │ ├── lengths.ts
+  │ │ ├── models.ts
+  │ │ ├── colors.ts
+  │ │ ├── sizes.ts
+  │ │ └── product-types.ts
+  │ └── index.ts
 
-Styling: TailwindCSS 4
+## ✅ Tasks
 
-Database: PostgreSQL via Drizzle ORM
+1. Clean already existing schemas from `lib/db/schema.ts` file and delete that file.
+2. **Define Schema Files**
 
-ORM: Drizzle ORM
+- Implement Drizzle ORM schemas for the following entities:
 
-Auth: Better Auth (only admins can manage news)
+  - Users
+    id: uuid (pk)
+    email: string (unique, not null)
+    password_hash: string
+    first_name: string
+    last_name: string
+    phone: string (nullable)
+    email_verified: boolean (default false)
+    role: enum('customer', 'admin', 'staff') (default 'customer')
+    is_active: boolean (default true)
+    created_at: timestamp
+    updated_at: timestamp
 
-Language: TypeScript
+  - Guests
+    id: string (pk) // session-based
+    session_token: string (unique)
+    created_at: timestamp
+    expires_at: timestamp
 
-Icons: Lucide React
+  - Addresses
+    id: uuid (pk)
+    user_id: uuid (fk -> users.id)
+    type: enum('billing', 'shipping')
+    line1: string
+    line2: string (nullable)
+    city: string
+    state: string
+    country: string
+    postal_code: string
+    is_default: boolean (default false)
+    created_at: timestamp
+    updated_at: timestamp
 
-## Tasks
+  - Products
+    id: uuid (pk)
+    name: string
+    description: text
+    category_id: uuid (fk -> categories.id)
+    product_type_id: uuid (fk -> product_types.id)
+    brand_id: uuid (fk -> brands.id)
+    is_published: boolean (default false)
+    default_variant_id: uuid (nullable, fk -> product_variants.id)
+    created_at: timestamp
+    updated_at: timestamp
 
-Database Setup (Drizzle ORM)
+  - Categories
+    id: uuid (pk)
+    name: string
+    slug: string (unique)
+    parent_id: uuid (nullable, fk -> categories.id)
+    created_at: timestamp
+    updated_at: timestamp
 
-Create a news table with fields:
+  - Product Variants
+    id: uuid (pk)
+    product_id: uuid (fk -> products.id)
+    sku: string (unique)
+    price: numeric(10, 2)
+    sale_price: numeric(10, 2) (nullable)
+    color_id: uuid (nullable, fk -> colors.id)
+    size_id: uuid (nullable, fk -> sizes.id)
+    model_id: uuid (nullable, fk -> models.id)
+    length_id: uuid (nullable, fk -> lengths.id)
+    in_stock: int (default 0)
+    min_stock_level: int (default 0)
+    weight: float (nullable)
+    dimensions: jsonb // { length, width, height }
+    barcode: string (nullable)
+    manufacturer_part_number: string (nullable)
+    created_at: timestamp
+    updated_at: timestamp
 
-id (UUID, primary key)
+  - Product Images
+    id: uuid (pk)
+    product_id: uuid (fk -> products.id)
+    variant_id: uuid (nullable, fk -> product_variants.id)
+    url: string
+    alt_text: string (nullable)
+    sort_order: int (default 0)
+    is_primary: boolean (default false)
+    created_at: timestamp
 
-title (string, max 200 chars)
+  - Product Specifications
+    id: uuid (pk)
+    product_id: uuid (fk -> products.id)
+    spec_key: string // "Bandwidth", "Port Count", "Power Consumption"
+    spec_value: string // "10 Gbps", "24", "150W"
+    spec_unit: string (nullable) // "Gbps", "ports", "watts"
+    spec_group: string (nullable) // "Performance", "Physical", "Power"
+    sort_order: int (default 0)
 
-text (text)
+  - Product Types
+    id: uuid (pk)
+    name: string // "Router", "Switch", "Cable", "Rack", "Access Point"
+    slug: string (unique)
+    created_at: timestamp
 
-imageUrl (string)
+  - Brands
+    id: uuid (pk)
+    name: string // e.g., "UBIQUITI", "TP-LINK", "CISCO"
+    slug: string (unique)
+    logo_url: string (nullable)
+    created_at: timestamp
+    updated_at: timestamp
 
-date (timestamp with timezone, defaults to now)
+  - Colors
+    id: uuid (pk)
+    name: string // "Black", "White", "Gray"
+    slug: string (unique)
+    hex_code: string // "#000000"
+    sort_order: int (default 0)
 
-authorId (UUID) — references users.id
+  - Sizes
+    id: uuid (pk)
+    name: string // "4U", "8U", "12U", "24U", "42U"
+    slug: string (unique)
+    sort_order: int // for ordering: 4U < 8U < 12U
 
-Migrate using Drizzle (db:generate, db:push).
+  - Models
+    id: uuid (pk)
+    name: string // "UAP-AC-PRO", "USW-24-POE"
+    slug: string (unique)
+    sort_order: int (default 0)
 
-Admin Management (Server Only)
+  - Lengths
+    id: uuid (pk)
+    name: string // "1M", "2M", "5M", "10M"
+    slug: string (unique)
+    sort_order: int // for ordering: 1M < 2M < 5M
 
-Create admin-only functions (in src/lib/admin/news.ts) to:
+  - Carts
+    id: uuid (pk)
+    user_id: uuid (nullable, fk -> users.id) // for registered users
+    guest_id: string (nullable, fk -> guests.id) // for guest users
+    created_at: timestamp
+    updated_at: timestamp
+    expires_at: timestamp (nullable) // for automatic cleanup
 
-Add new news entries
+  - Cart Items
+    id: uuid (pk)
+    cart_id: uuid (fk -> carts.id)
+    product_variant_id: uuid (fk -> product_variants.id)
+    quantity: int (default 1)
+    created_at: timestamp
+    updated_at: timestamp
 
-Edit or delete existing news entries
+  - Orders
+    id: uuid (pk)
+    order_number: string (unique) // human-readable order number
+    user_id: uuid (nullable, fk -> users.id)
+    guest_email: string (nullable) // for guest orders
+    status: enum('pending', 'processing', 'paid', 'shipped', 'delivered', 'cancelled', 'refunded')
+    subtotal: numeric(10, 2)
+    shipping_cost: numeric(10, 2) (default 0)
+    tax_amount: numeric(10, 2) (default 0)
+    total_amount: numeric(10, 2)
+    shipping_address_id: uuid (fk -> addresses.id)
+    billing_address_id: uuid (fk -> addresses.id)
+    shipping_method: string (nullable)
+    tracking_number: string (nullable)
+    notes: text (nullable)
+    created_at: timestamp
+    updated_at: timestamp
 
-These should be server actions protected by Better Auth admin validation (e.g., session.user.role === 'admin').
+  - Order Items
+    id: uuid (pk)
+    order_id: uuid (fk -> orders.id)
+    product_variant_id: uuid (fk -> product_variants.id)
+    product_name: string // snapshot at purchase time
+    variant_sku: string // snapshot at purchase time
+    quantity: int
+    price_at_purchase: numeric(10, 2)
+    subtotal: numeric(10, 2) // quantity \* price_at_purchase
+    created_at: timestamp
 
-There is no public form for creating or editing news.
+  - Payments
+    id: uuid (pk)
+    order_id: uuid (fk -> orders.id)
+    method: enum('zaincash', 'qicard', 'cash_on_delivery')
+    status: enum('pending', 'processing', 'completed', 'failed', 'refunded')
+    amount: numeric(10, 2)
+    transaction_id: string (nullable)
+    gateway_response: jsonb (nullable) // store gateway responses
+    paid_at: timestamp (nullable)
+    created_at: timestamp
+    updated_at: timestamp
 
-Public Page Setup
+  - Coupons
+    id: uuid (pk)
+    code: string (unique)
+    description: text (nullable)
+    discount_type: enum('percentage', 'fixed')
+    discount_value: numeric(10, 2)
+    minimum_purchase: numeric(10, 2) (nullable)
+    expires_at: timestamp (nullable)
+    max_usage: int (nullable)
+    used_count: int (default 0)
+    is_active: boolean (default true)
+    created_at: timestamp
+    updated_at: timestamp
 
-Create /app/news/page.tsx to:
+  - Wishlists
+    id: uuid (pk)
+    user_id: uuid (fk -> users.id)
+    product_id: uuid (fk -> products.id)
+    created_at: timestamp
 
-Fetch all news posts from the database (ordered by date DESC).
+  - Collections
+    id: uuid (pk)
+    name: string
+    slug: string (unique)
+    description: text (nullable)
+    is_active: boolean (default true)
+    created_at: timestamp
+    updated_at: timestamp
 
-Pass them to a NewsCard component for rendering.
+  - Product Collections (junction table)
+    id: uuid (pk)
+    product_id: uuid (fk -> products.id)
+    collection_id: uuid (fk -> collections.id)
+    sort_order: int (default 0)
+    created_at: timestamp
 
-This page is publicly accessible.
+3. **Data Modeling Best Practices**
 
-Component Creation
+- Use accurate data types: uuid, text, numeric, jsonb, timestamp, enum, etc.
+- Define proper **foreign key relationships** using relations().
+- Normalize the structure for referential integrity and scalability.
+- Include **constraints**: unique, not null, default, check constraints where appropriate.
+- Use **snake_case** for database columns and **camelCase** in TypeScript.
+- Add database indexes for frequently queried columns (foreign keys, slugs, email, etc.)
+- Add composite unique constraints where needed (e.g., user_id + product_id in wishlists)
+- Include appropriate check constraints (e.g., price > 0, quantity > 0)
 
-Create a NewsCard component (src/components/NewsCard.tsx) with props:
+4. **Validation & Typing**
 
-{
-title: string;
-text: string;
-imageUrl: string;
-date: string;
-}
+- Use Zod validation for each table with insert and select schemas.
+- Create proper TypeScript enums and use them in the relevant schemas.
+- Export inferred types from Zod schemas for use in application code.
+- Implement proper error handling patterns.
 
-Display image, formatted date, title, and truncated text.
+5. **Maintainability**
 
-Use TailwindCSS for clean responsive styling.
+- Keep schema files modular and readable.
+- Group related entities (e.g. filters/) logically.
+- Ensure compatibility with drizzle-kit migration tools.
+- Design to support future use in APIs (REST/tRPC), admin dashboards, and internal tooling.
+- Add comprehensive JSDoc comments for complex fields or relationships.
+- Create a central export file (index.ts) that re-exports all schemas and types.
 
-## Output Requirements
+6. **Indexes and Performance**
 
-Return:
+Create appropriate indexes for:
 
-The Drizzle schema for news
+- All foreign key columns
+- Unique constraints (email, slug, sku, etc.)
+- Frequently queried columns (is_published, status, created_at)
+- Composite indexes for common query patterns:
+  - (product_id, is_primary) on product_images
+  - (user_id, created_at) on orders
+  - (cart_id, product_variant_id) on cart_items
 
-The NewsCard React component
+7. **Seed**
+   - Study the product-related schema (including products, product_variants, categories, etc.).
+   - Create a seed.ts function that populates the database with 15 realistic networking/IT products
+   - Product examples: routers, switches, ethernet cables, fiber optic cables, server racks, patch panels, access points
+   - Include relevant brands: Ubiquiti, TP-Link, Cisco, Netgear, MikroTik
+   - Seeds all filters (lengths, models, colors, sizes), brands, product types, categories, collections
+   - For each product create realistic variants based on:
+     - Models (for routers/switches: different specifications)
+     - Lengths (for cables: 1M, 2M, 5M, 10M, 20M)
+     - Sizes (for racks: 4U, 8U, 12U, 24U, 42U)
+     - Colors where applicable (black, white, gray)
+   - Add realistic technical specifications for each product
+   - Generate 3-5 variants per product with different combinations
+   - Add 2-4 images per product/variant
+   - Upload images from public/products to server using fs as static images to static/uploads/...
+   - Seed data should reflect proper foreign key relationships and follow all constraints
+   - Log progress and errors clearly with colored console output
+   - Add db:seed script to package.json
+   - Implement idempotent seeding (can be run multiple times safely)
 
-The Next.js News page (/app/news/page.tsx)
+## 📦 Output Requirements
 
-The admin-only functions (src/lib/admin/news.ts)
+- Fully typed Drizzle ORM schema definitions per table
+- Zod-based validation schemas for each table (insert and select schemas)
+- Foreign keys and relations defined with relations()
+- Proper TypeScript enums exported for reuse
+- Clean file separation and index export
+- All necessary database indexes defined
+- Ready for production with no placeholder/mocked data
 
-Instructions on where to place each file and how to restrict admin access using Better Auth
+## 📝 Notes
 
-## Notes
-
-Only admins can create or modify news posts — public users can only read.
-
-Use server-only and auth() checks for admin routes/actions.
-
-Optimize images using Next.js <Image />.
-
-Keep UI minimal and mobile-friendly.
-
-Maintain consistent folder structure with src/components, src/app/news, and src/lib/db.
+- This will power a production-grade system for a networking equipment e-commerce platform.
+- Focus on scalability, modularity, and clarity.
+- Don't include dummy data or test code outside of the seed script.
+- Code must be clean, reusable, and aligned with modern TypeScript best practices.
+- Ensure all monetary values use numeric(10, 2) for precision.
+- Use proper transaction handling in seed script for data consistency.
+- Consider future requirements like inventory tracking, multi-warehouse support, and B2B features in the schema design.

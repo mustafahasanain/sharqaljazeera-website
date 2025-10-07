@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# database helper scripts
+src/lib/db/check-tables.ts
+src/lib/db/drop-old-tables.ts
+
+# Windows reserved names
+nul
+con
+prn
+aux
+com[1-9]
+lpt[1-9]
