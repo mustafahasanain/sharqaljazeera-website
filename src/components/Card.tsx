@@ -96,7 +96,7 @@ export default function Card({
           )}
         </div>
         {description &&
-          (descriptionHref ? (
+          (descriptionHref && !href ? (
             <Link
               href={descriptionHref}
               onClick={(e) => e.stopPropagation()}
@@ -108,7 +108,7 @@ export default function Card({
             <p className="text-body text-dark-700">{description}</p>
           ))}
         {subtitle &&
-          (subtitleHref ? (
+          (subtitleHref && !href ? (
             <Link
               href={subtitleHref}
               onClick={(e) => e.stopPropagation()}
