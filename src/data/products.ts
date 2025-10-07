@@ -3,6 +3,8 @@
  * This data structure mirrors the database schema
  */
 
+import { brandsData, type BrandData } from './brands';
+
 export interface MockBrand {
   id: string;
   name: string;
@@ -46,14 +48,12 @@ export interface MockProduct {
   createdAt: Date;
 }
 
-// Mock brands
-export const mockBrands: MockBrand[] = [
-  { id: '1', name: 'TP-Link', slug: 'tp-link' },
-  { id: '2', name: 'Nike', slug: 'nike' },
-  { id: '3', name: 'Cisco', slug: 'cisco' },
-  { id: '4', name: 'Netgear', slug: 'netgear' },
-  { id: '5', name: 'Ubiquiti', slug: 'ubiquiti' },
-];
+// Use brands from brands.ts
+export const mockBrands: MockBrand[] = brandsData.map((brand) => ({
+  id: brand.id,
+  name: brand.name,
+  slug: brand.slug,
+}));
 
 // Mock categories
 export const mockCategories: MockCategory[] = [
@@ -82,8 +82,8 @@ export const mockProducts: MockProduct[] = [
     description: 'Next-gen WiFi 6 router with speeds up to 1.8 Gbps',
     categoryId: '1',
     categoryName: 'Routers',
-    brandId: '1',
-    brandName: 'TP-Link',
+    brandId: '3',
+    brandName: 'TP-LINK',
     imageSrc: '/products/product-1.png',
     badge: { label: 'Best Seller', tone: 'red' },
     createdAt: new Date('2024-03-15'),
@@ -115,7 +115,7 @@ export const mockProducts: MockProduct[] = [
     categoryId: '1',
     categoryName: 'Routers',
     brandId: '4',
-    brandName: 'Netgear',
+    brandName: 'MIKROTIK',
     imageSrc: '/products/product-2.png',
     badge: { label: 'Extra 20% off', tone: 'green' },
     createdAt: new Date('2024-02-20'),
@@ -123,7 +123,7 @@ export const mockProducts: MockProduct[] = [
       {
         id: '2-1',
         productId: '2',
-        sku: 'NTG-AC1900-BLK',
+        sku: 'MKR-AC1900-BLK',
         price: 119.99,
         salePrice: 95.99,
         colorId: '1',
@@ -138,8 +138,8 @@ export const mockProducts: MockProduct[] = [
     description: 'All-in-one enterprise network solution',
     categoryId: '1',
     categoryName: 'Routers',
-    brandId: '5',
-    brandName: 'Ubiquiti',
+    brandId: '2',
+    brandName: 'UBIQUITI',
     imageSrc: '/products/product-3.png',
     badge: { label: 'Sustainable Materials', tone: 'green' },
     createdAt: new Date('2024-01-10'),
@@ -161,8 +161,8 @@ export const mockProducts: MockProduct[] = [
     description: 'Enterprise-grade managed switch with PoE+',
     categoryId: '2',
     categoryName: 'Switches',
-    brandId: '3',
-    brandName: 'Cisco',
+    brandId: '12',
+    brandName: 'CISCO',
     imageSrc: '/products/product-4.png',
     createdAt: new Date('2024-03-01'),
     variants: [
@@ -183,8 +183,8 @@ export const mockProducts: MockProduct[] = [
     description: 'High-speed WiFi 6 with advanced security features',
     categoryId: '1',
     categoryName: 'Routers',
-    brandId: '1',
-    brandName: 'TP-Link',
+    brandId: '3',
+    brandName: 'TP-LINK',
     imageSrc: '/products/product-1.png',
     badge: { label: 'Best Seller', tone: 'red' },
     createdAt: new Date('2024-03-20'),
@@ -215,8 +215,8 @@ export const mockProducts: MockProduct[] = [
     description: 'Next-generation WiFi 6E with 6GHz band support',
     categoryId: '1',
     categoryName: 'Routers',
-    brandId: '4',
-    brandName: 'Netgear',
+    brandId: '9',
+    brandName: 'HUAWEI',
     imageSrc: '/products/product-2.png',
     badge: { label: 'Extra 20% off', tone: 'green' },
     createdAt: new Date('2024-02-15'),
@@ -224,7 +224,7 @@ export const mockProducts: MockProduct[] = [
       {
         id: '6-1',
         productId: '6',
-        sku: 'NTG-WIFI6E-WHT',
+        sku: 'HW-WIFI6E-WHT',
         price: 399.99,
         salePrice: 319.99,
         colorId: '2',
@@ -239,8 +239,8 @@ export const mockProducts: MockProduct[] = [
     description: 'Boost your WiFi coverage with dual-band technology',
     categoryId: '5',
     categoryName: 'Range Extenders',
-    brandId: '1',
-    brandName: 'TP-Link',
+    brandId: '3',
+    brandName: 'TP-LINK',
     imageSrc: '/products/product-3.png',
     createdAt: new Date('2024-01-25'),
     variants: [
@@ -261,8 +261,8 @@ export const mockProducts: MockProduct[] = [
     description: 'High-performance WiFi 6 access point for large areas',
     categoryId: '3',
     categoryName: 'Access Points',
-    brandId: '5',
-    brandName: 'Ubiquiti',
+    brandId: '2',
+    brandName: 'UBIQUITI',
     imageSrc: '/products/product-4.png',
     badge: { label: 'Best Seller', tone: 'red' },
     createdAt: new Date('2024-03-10'),
@@ -284,8 +284,8 @@ export const mockProducts: MockProduct[] = [
     description: 'Compact managed switch with VLAN support',
     categoryId: '2',
     categoryName: 'Switches',
-    brandId: '1',
-    brandName: 'TP-Link',
+    brandId: '3',
+    brandName: 'TP-LINK',
     imageSrc: '/products/product-1.png',
     createdAt: new Date('2024-02-05'),
     variants: [
@@ -307,7 +307,7 @@ export const mockProducts: MockProduct[] = [
     categoryId: '1',
     categoryName: 'Routers',
     brandId: '4',
-    brandName: 'Netgear',
+    brandName: 'MIKROTIK',
     imageSrc: '/products/product-2.png',
     badge: { label: 'Extra 10% off', tone: 'green' },
     createdAt: new Date('2024-03-25'),
@@ -315,7 +315,7 @@ export const mockProducts: MockProduct[] = [
       {
         id: '10-1',
         productId: '10',
-        sku: 'NTG-AX5400-BLK',
+        sku: 'MKR-AX5400-BLK',
         price: 229.99,
         salePrice: 206.99,
         colorId: '1',
@@ -325,7 +325,7 @@ export const mockProducts: MockProduct[] = [
       {
         id: '10-2',
         productId: '10',
-        sku: 'NTG-AX5400-BLU',
+        sku: 'MKR-AX5400-BLU',
         price: 229.99,
         salePrice: 206.99,
         colorId: '3',
@@ -340,8 +340,8 @@ export const mockProducts: MockProduct[] = [
     description: 'High-speed wireless adapter with dual-band support',
     categoryId: '4',
     categoryName: 'Network Adapters',
-    brandId: '1',
-    brandName: 'TP-Link',
+    brandId: '3',
+    brandName: 'TP-LINK',
     imageSrc: '/products/product-3.png',
     createdAt: new Date('2024-01-15'),
     variants: [
@@ -362,8 +362,8 @@ export const mockProducts: MockProduct[] = [
     description: 'High-speed cable modem for gigabit internet',
     categoryId: '6',
     categoryName: 'Modems',
-    brandId: '4',
-    brandName: 'Netgear',
+    brandId: '1',
+    brandName: 'NETRIX',
     imageSrc: '/products/product-4.png',
     badge: { label: 'Sustainable Materials', tone: 'green' },
     createdAt: new Date('2024-02-10'),
@@ -371,7 +371,7 @@ export const mockProducts: MockProduct[] = [
       {
         id: '12-1',
         productId: '12',
-        sku: 'NTG-CM1200-WHT',
+        sku: 'NTX-CM1200-WHT',
         price: 169.99,
         colorId: '2',
         colorName: 'White',
@@ -385,8 +385,8 @@ export const mockProducts: MockProduct[] = [
     description: 'Whole-home mesh WiFi system with seamless roaming',
     categoryId: '1',
     categoryName: 'Routers',
-    brandId: '1',
-    brandName: 'TP-Link',
+    brandId: '3',
+    brandName: 'TP-LINK',
     imageSrc: '/products/product-1.png',
     badge: { label: 'Best Seller', tone: 'red' },
     createdAt: new Date('2024-03-18'),
@@ -408,8 +408,8 @@ export const mockProducts: MockProduct[] = [
     description: 'Managed switch with 16 PoE+ ports for IP cameras',
     categoryId: '2',
     categoryName: 'Switches',
-    brandId: '5',
-    brandName: 'Ubiquiti',
+    brandId: '2',
+    brandName: 'UBIQUITI',
     imageSrc: '/products/product-2.png',
     createdAt: new Date('2024-02-28'),
     variants: [
@@ -430,8 +430,8 @@ export const mockProducts: MockProduct[] = [
     description: 'Latest WiFi 6 technology in a compact USB adapter',
     categoryId: '4',
     categoryName: 'Network Adapters',
-    brandId: '1',
-    brandName: 'TP-Link',
+    brandId: '3',
+    brandName: 'TP-LINK',
     imageSrc: '/products/product-3.png',
     badge: { label: 'Extra 20% off', tone: 'green' },
     createdAt: new Date('2024-03-05'),
@@ -555,3 +555,17 @@ export const priceRanges = [
   { label: '$200 - $300', min: 200, max: 300 },
   { label: 'Over $300', min: 300, max: 999999 },
 ];
+
+/**
+ * Get product counts by brand name
+ */
+export function getProductCountsByBrand(): Record<string, number> {
+  const counts: Record<string, number> = {};
+
+  mockProducts.forEach((product) => {
+    const brandName = product.brandName;
+    counts[brandName] = (counts[brandName] || 0) + 1;
+  });
+
+  return counts;
+}

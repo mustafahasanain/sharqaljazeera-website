@@ -12,10 +12,10 @@ import {
   removeFilter,
 } from '@/lib/utils/query';
 import {
-  getAvailableBrands,
   getAvailableCategories,
   priceRanges,
 } from '@/data/products';
+import { getBrands } from '@/data/brands';
 
 interface FilterGroup {
   id: string;
@@ -44,7 +44,7 @@ export default function Filters() {
       id: 'brands',
       label: 'Brand',
       filterKey: 'brands',
-      options: getAvailableBrands().map((brand) => ({
+      options: getBrands().map((brand) => ({
         value: brand.name,
         label: brand.name,
       })),

@@ -18,7 +18,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
     { label: "NEWS", href: "/news" },
     { label: "OFFERS", href: "#" },
     { label: "SHOP", href: "/shop" },
-    { label: "BRANDS", href: "#" },
+    { label: "BRANDS", href: "/brands" },
   ];
 
   return (
