@@ -1,345 +1,117 @@
 You are a senior full-stack engineer assigned to build a modern web application from scratch.
 
-## 💼 Objective
+## Objective
 
-Design and implement robust, normalized **database schemas** using **Drizzle ORM** for a scalable eCommerce application. This includes user accounts, product catalog, filters, orders, and supporting features, all aligned with industry best practices for long-term scalability and clean code architecture.
+Build a **Product Listing Page** for a an e-commerce web app that supports filterable, sortable product listings. Product data must render **server-side** using URL query parameters. The filter & sort UI must be built using **client-only components** that sync state to the URL, without performing any data fetching themselves.
 
-## 🧰 Structure
+The design should take inspiration from the attached layout and adapt it into this application’s brand identity, following the theme and typography defined in `src/app/globals.css`.
 
-- Tech Stack:
-  - **ORM**: Drizzle ORM
-  - **Database**: PostgreSQL (hosted on Neon Serverless)
-  - **Language**: TypeScript
-  - **Validation**: Zod schema integration
-- Folder & File Structure:
-  /lib
-  └── db
-  ├── schema/
-  │ ├── users.ts
-  │ ├── addresses.ts
-  │ ├── products.ts
-  │ ├── variants.ts
-  │ ├── categories.ts
-  │ ├── collections.ts
-  │ ├── orders.ts
-  │ ├── carts.ts
-  │ ├── payments.ts
-  │ ├── coupons.ts
-  │ ├── wishlists.ts
-  │ ├── filters/
-  │ │ ├── brands.ts
-  │ │ ├── lengths.ts
-  │ │ ├── models.ts
-  │ │ ├── colors.ts
-  │ │ ├── sizes.ts
-  │ │ └── product-types.ts
-  │ └── index.ts
+## Structure
+
+- Use **Next.js App Router**.
+- Use **`query-string`** for parsing and stringifying query parameters.
+- Use **Next.js** for routing & shallow updates (do not use the `URLSearchParams` API directly).
+- Query-related helpers must live in `/lib/utils/query.ts`.
+- Keep logic modular: separate client components for `Filters.tsx` and `Sort.tsx`.
+- Existing UI components like `Card.tsx` must be reused.
+- Use Tailwind CSS, respecting global theme from `/src/app/globals.css`.
+- Folder Structure
+    
+    ```
+    /src
+    ├── app/
+    ├── (root)/
+    │   └── products/
+    │       └── page.tsx              ← server-rendered product listing
+    ├── components/
+    │   ├── Filters.tsx               ← client-only filters
+    │   ├── Sort.tsx                  ← client-only sort
+    │   └── Card.tsx                  ← reused product card
+    ├── lib/
+    │   └── utils/
+    │       └── query.ts              ← helpers for parsing/stringifying URL filters
+    
+    ```
+    
 
 ## ✅ Tasks
 
-1. Clean already existing schemas from `lib/db/schema.ts` file and delete that file.
-2. **Define Schema Files**
-
-- Implement Drizzle ORM schemas for the following entities:
-
-  - Users
-    id: uuid (pk)
-    email: string (unique, not null)
-    password_hash: string
-    first_name: string
-    last_name: string
-    phone: string (nullable)
-    email_verified: boolean (default false)
-    role: enum('customer', 'admin', 'staff') (default 'customer')
-    is_active: boolean (default true)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Guests
-    id: string (pk) // session-based
-    session_token: string (unique)
-    created_at: timestamp
-    expires_at: timestamp
-
-  - Addresses
-    id: uuid (pk)
-    user_id: uuid (fk -> users.id)
-    type: enum('billing', 'shipping')
-    line1: string
-    line2: string (nullable)
-    city: string
-    state: string
-    country: string
-    postal_code: string
-    is_default: boolean (default false)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Products
-    id: uuid (pk)
-    name: string
-    description: text
-    category_id: uuid (fk -> categories.id)
-    product_type_id: uuid (fk -> product_types.id)
-    brand_id: uuid (fk -> brands.id)
-    is_published: boolean (default false)
-    default_variant_id: uuid (nullable, fk -> product_variants.id)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Categories
-    id: uuid (pk)
-    name: string
-    slug: string (unique)
-    parent_id: uuid (nullable, fk -> categories.id)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Product Variants
-    id: uuid (pk)
-    product_id: uuid (fk -> products.id)
-    sku: string (unique)
-    price: numeric(10, 2)
-    sale_price: numeric(10, 2) (nullable)
-    color_id: uuid (nullable, fk -> colors.id)
-    size_id: uuid (nullable, fk -> sizes.id)
-    model_id: uuid (nullable, fk -> models.id)
-    length_id: uuid (nullable, fk -> lengths.id)
-    in_stock: int (default 0)
-    min_stock_level: int (default 0)
-    weight: float (nullable)
-    dimensions: jsonb // { length, width, height }
-    barcode: string (nullable)
-    manufacturer_part_number: string (nullable)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Product Images
-    id: uuid (pk)
-    product_id: uuid (fk -> products.id)
-    variant_id: uuid (nullable, fk -> product_variants.id)
-    url: string
-    alt_text: string (nullable)
-    sort_order: int (default 0)
-    is_primary: boolean (default false)
-    created_at: timestamp
-
-  - Product Specifications
-    id: uuid (pk)
-    product_id: uuid (fk -> products.id)
-    spec_key: string // "Bandwidth", "Port Count", "Power Consumption"
-    spec_value: string // "10 Gbps", "24", "150W"
-    spec_unit: string (nullable) // "Gbps", "ports", "watts"
-    spec_group: string (nullable) // "Performance", "Physical", "Power"
-    sort_order: int (default 0)
-
-  - Product Types
-    id: uuid (pk)
-    name: string // "Router", "Switch", "Cable", "Rack", "Access Point"
-    slug: string (unique)
-    created_at: timestamp
-
-  - Brands
-    id: uuid (pk)
-    name: string // e.g., "UBIQUITI", "TP-LINK", "CISCO"
-    slug: string (unique)
-    logo_url: string (nullable)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Colors
-    id: uuid (pk)
-    name: string // "Black", "White", "Gray"
-    slug: string (unique)
-    hex_code: string // "#000000"
-    sort_order: int (default 0)
-
-  - Sizes
-    id: uuid (pk)
-    name: string // "4U", "8U", "12U", "24U", "42U"
-    slug: string (unique)
-    sort_order: int // for ordering: 4U < 8U < 12U
-
-  - Models
-    id: uuid (pk)
-    name: string // "UAP-AC-PRO", "USW-24-POE"
-    slug: string (unique)
-    sort_order: int (default 0)
-
-  - Lengths
-    id: uuid (pk)
-    name: string // "1M", "2M", "5M", "10M"
-    slug: string (unique)
-    sort_order: int // for ordering: 1M < 2M < 5M
-
-  - Carts
-    id: uuid (pk)
-    user_id: uuid (nullable, fk -> users.id) // for registered users
-    guest_id: string (nullable, fk -> guests.id) // for guest users
-    created_at: timestamp
-    updated_at: timestamp
-    expires_at: timestamp (nullable) // for automatic cleanup
-
-  - Cart Items
-    id: uuid (pk)
-    cart_id: uuid (fk -> carts.id)
-    product_variant_id: uuid (fk -> product_variants.id)
-    quantity: int (default 1)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Orders
-    id: uuid (pk)
-    order_number: string (unique) // human-readable order number
-    user_id: uuid (nullable, fk -> users.id)
-    guest_email: string (nullable) // for guest orders
-    status: enum('pending', 'processing', 'paid', 'shipped', 'delivered', 'cancelled', 'refunded')
-    subtotal: numeric(10, 2)
-    shipping_cost: numeric(10, 2) (default 0)
-    tax_amount: numeric(10, 2) (default 0)
-    total_amount: numeric(10, 2)
-    shipping_address_id: uuid (fk -> addresses.id)
-    billing_address_id: uuid (fk -> addresses.id)
-    shipping_method: string (nullable)
-    tracking_number: string (nullable)
-    notes: text (nullable)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Order Items
-    id: uuid (pk)
-    order_id: uuid (fk -> orders.id)
-    product_variant_id: uuid (fk -> product_variants.id)
-    product_name: string // snapshot at purchase time
-    variant_sku: string // snapshot at purchase time
-    quantity: int
-    price_at_purchase: numeric(10, 2)
-    subtotal: numeric(10, 2) // quantity \* price_at_purchase
-    created_at: timestamp
-
-  - Payments
-    id: uuid (pk)
-    order_id: uuid (fk -> orders.id)
-    method: enum('zaincash', 'qicard', 'cash_on_delivery')
-    status: enum('pending', 'processing', 'completed', 'failed', 'refunded')
-    amount: numeric(10, 2)
-    transaction_id: string (nullable)
-    gateway_response: jsonb (nullable) // store gateway responses
-    paid_at: timestamp (nullable)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Coupons
-    id: uuid (pk)
-    code: string (unique)
-    description: text (nullable)
-    discount_type: enum('percentage', 'fixed')
-    discount_value: numeric(10, 2)
-    minimum_purchase: numeric(10, 2) (nullable)
-    expires_at: timestamp (nullable)
-    max_usage: int (nullable)
-    used_count: int (default 0)
-    is_active: boolean (default true)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Wishlists
-    id: uuid (pk)
-    user_id: uuid (fk -> users.id)
-    product_id: uuid (fk -> products.id)
-    created_at: timestamp
-
-  - Collections
-    id: uuid (pk)
-    name: string
-    slug: string (unique)
-    description: text (nullable)
-    is_active: boolean (default true)
-    created_at: timestamp
-    updated_at: timestamp
-
-  - Product Collections (junction table)
-    id: uuid (pk)
-    product_id: uuid (fk -> products.id)
-    collection_id: uuid (fk -> collections.id)
-    sort_order: int (default 0)
-    created_at: timestamp
-
-3. **Data Modeling Best Practices**
-
-- Use accurate data types: uuid, text, numeric, jsonb, timestamp, enum, etc.
-- Define proper **foreign key relationships** using relations().
-- Normalize the structure for referential integrity and scalability.
-- Include **constraints**: unique, not null, default, check constraints where appropriate.
-- Use **snake_case** for database columns and **camelCase** in TypeScript.
-- Add database indexes for frequently queried columns (foreign keys, slugs, email, etc.)
-- Add composite unique constraints where needed (e.g., user_id + product_id in wishlists)
-- Include appropriate check constraints (e.g., price > 0, quantity > 0)
-
-4. **Validation & Typing**
-
-- Use Zod validation for each table with insert and select schemas.
-- Create proper TypeScript enums and use them in the relevant schemas.
-- Export inferred types from Zod schemas for use in application code.
-- Implement proper error handling patterns.
-
-5. **Maintainability**
-
-- Keep schema files modular and readable.
-- Group related entities (e.g. filters/) logically.
-- Ensure compatibility with drizzle-kit migration tools.
-- Design to support future use in APIs (REST/tRPC), admin dashboards, and internal tooling.
-- Add comprehensive JSDoc comments for complex fields or relationships.
-- Create a central export file (index.ts) that re-exports all schemas and types.
-
-6. **Indexes and Performance**
-
-Create appropriate indexes for:
-
-- All foreign key columns
-- Unique constraints (email, slug, sku, etc.)
-- Frequently queried columns (is_published, status, created_at)
-- Composite indexes for common query patterns:
-  - (product_id, is_primary) on product_images
-  - (user_id, created_at) on orders
-  - (cart_id, product_variant_id) on cart_items
-
-7. **Seed**
-   - Study the product-related schema (including products, product_variants, categories, etc.).
-   - Create a seed.ts function that populates the database with 15 realistic networking/IT products
-   - Product examples: routers, switches, ethernet cables, fiber optic cables, server racks, patch panels, access points
-   - Include relevant brands: Ubiquiti, TP-Link, Cisco, Netgear, MikroTik
-   - Seeds all filters (lengths, models, colors, sizes), brands, product types, categories, collections
-   - For each product create realistic variants based on:
-     - Models (for routers/switches: different specifications)
-     - Lengths (for cables: 1M, 2M, 5M, 10M, 20M)
-     - Sizes (for racks: 4U, 8U, 12U, 24U, 42U)
-     - Colors where applicable (black, white, gray)
-   - Add realistic technical specifications for each product
-   - Generate 3-5 variants per product with different combinations
-   - Add 2-4 images per product/variant
-   - Upload images from public/products to server using fs as static images to static/uploads/...
-   - Seed data should reflect proper foreign key relationships and follow all constraints
-   - Log progress and errors clearly with colored console output
-   - Add db:seed script to package.json
-   - Implement idempotent seeding (can be run multiple times safely)
+- 
+    1. **Server-Rendered Product Page**
+    - Read filter/sort state from `searchParams`.
+    - Use helper functions from `/lib/utils/query.ts` to parse query params.
+    - Filter and sort mocked product data accordingly (no data fetching. Use images from `/public` folder)
+    - Render a responsive grid of `Card` components with filtered results.
+    - Show active filters (e.g., badges like “Men”, “Red”, “Size: M”).
+- 
+    1. **Filters UI (`Filters.tsx`)**
+    
+    Build a **client-only** sidebar/drawer component:
+    
+    - Filter groups: Brand, Category, Price Range (should be checkboxes).
+    - Each group supports **multi-selection** with checkboxes.
+    - Clicking a selected filter **removes** it from the URL.
+    - Must use `query-string` npm package to **read and update URL filters**.
+    - Must use **Next.js routing for URL params update**.
+    - Reads initial state from URL and updates it without full reload.
+    - **Responsive**:
+        - Sidebar on desktop.
+        - A collapsible filter drawer that slides in from the left on mobile devices, appearing above the product page with a semi-transparent overlay for focus.
+    - Expands/collapses filter groups.
+    - Styled with Tailwind while strictly respecting `src/app/globals.css` style theme
+- 
+    1. **Sort UI (`Sort.tsx`)**
+    - Build a **client-only** dropdown or button group.
+    - Options: Featured, Newest, Price (High → Low), Price (Low → High).
+    - Sort state must sync to URL query param (e.g., `?sort=price_desc`).
+    - Use `query-string` with Next.js routing.
+    - Also resets pagination to page 1 on sort change.
+- 
+    1. **Query Utilities (`/lib/utils/query.ts`)**
+    - Write reusable functions for updating and removing URL params.
+    - Must use `query-string` package.
+    - These should be pure functions (easy to test).
+- 
+    1. **Navigation Links**
+    - Other pages (e.g., category navigation like “TP-Link”) must link to `/products?brand=tp-link`.
+    - Clicking those links must pre-apply filters server-side and reflect them in UI.
+- 
+    1. **Responsiveness**
+    - **Entire layout must be mobile-first and fully responsive**.
+    - Filters collapse into drawer on small screens.
+    - Use Tailwind utility classes (no inline styles unless strictly necessary).
+    - Whole layout should respect max width structure as all other pages. It should be uniform in structure.
+- 
+    1. **URL & State Sync**
+    
+    Filter/Sort UI should:
+    
+    - Stay in sync with URL query string.
+    - Work with browser back/forward.
+    - Clear filters via UI and update URL accordingly.
+    - Emit filter changes that cause shallow navigation.
+- 
+    1. **Accessibility**
+    - Use semantic HTML.
+    - Keyboard-navigable filter checkboxes.
+    - Visibly focused states.
 
 ## 📦 Output Requirements
 
-- Fully typed Drizzle ORM schema definitions per table
-- Zod-based validation schemas for each table (insert and select schemas)
-- Foreign keys and relations defined with relations()
-- Proper TypeScript enums exported for reuse
-- Clean file separation and index export
-- All necessary database indexes defined
-- Ready for production with no placeholder/mocked data
+- A fully functional server side rendered `/products` page:
+    - Filters, sort options, and URL sync working end-to-end.
+    - Responsive design with sidebar/drawer behavior.
+- `Filters.tsx` and `Sort.tsx` implemented as isolated client-only components.
+- `lib/utils/query.ts` utility with tested, modular URL-handling functions.
+- All UI interactions update the URL and rerender data accordingly.
+- Clean, maintainable code with modular structure and component reuse.
+- Handle empty state gracefully if no products match filters.
 
 ## 📝 Notes
 
-- This will power a production-grade system for a networking equipment e-commerce platform.
-- Focus on scalability, modularity, and clarity.
-- Don't include dummy data or test code outside of the seed script.
-- Code must be clean, reusable, and aligned with modern TypeScript best practices.
-- Ensure all monetary values use numeric(10, 2) for precision.
-- Use proper transaction handling in seed script for data consistency.
-- Consider future requirements like inventory tracking, multi-warehouse support, and B2B features in the schema design.
+- No real backend integration; mocked data only.
+- Filters should apply **immediately** on change (no Apply button).
+- Refer to Next.js 15 way of reading values from searchParams
+- Product cards should reflect active filters (e.g., show bran or category).
+- Placeholder product data must mirror actual schema (refer to product structure + variants).
+- Study the DB architecture provided separately before writing the seed function to match.

@@ -6,7 +6,9 @@
       "Bash(npx tsx:*)",
       "Bash(npm run:*)",
       "Bash(mkdir:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
