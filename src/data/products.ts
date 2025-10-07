@@ -460,6 +460,7 @@ export function getProducts({
   priceMax,
   sort = 'featured',
   limit,
+  page = 1,
 }: {
   brands?: string[];
   categories?: string[];
@@ -467,7 +468,8 @@ export function getProducts({
   priceMax?: number;
   sort?: string;
   limit?: number;
-} = {}): MockProduct[] {
+  page?: number;
+} = {}): { products: MockProduct[]; total: number } {
   let filtered = [...mockProducts];
 
   // Filter by brands
@@ -523,12 +525,16 @@ export function getProducts({
       break;
   }
 
-  // Apply limit if specified
+  // Get total count before pagination
+  const total = filtered.length;
+
+  // Apply pagination
   if (limit && limit > 0) {
-    filtered = filtered.slice(0, limit);
+    const offset = (page - 1) * limit;
+    filtered = filtered.slice(offset, offset + limit);
   }
 
-  return filtered;
+  return { products: filtered, total };
 }
 
 /**

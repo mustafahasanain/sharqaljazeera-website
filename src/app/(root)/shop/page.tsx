@@ -2,14 +2,18 @@ import { Suspense } from "react";
 import { Card } from "@/components";
 import Filters from "@/components/Filters";
 import Sort from "@/components/Sort";
+import Pagination from "@/components/Pagination";
 import {
   parseFilters,
   getActiveFilters,
   removeFilter,
+  addFilter,
 } from "@/lib/utils/query";
 import { getProducts } from "@/data/products";
 import Link from "next/link";
 import { X } from "lucide-react";
+
+const PRODUCTS_PER_PAGE = 12;
 
 interface ProductsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -71,16 +75,20 @@ async function ProductsContent({ searchParams }: ProductsPageProps) {
 
   const filters = parseFilters(searchParamsString);
 
-  // Get filtered and sorted products
-  const products = getProducts({
+  // Get filtered and sorted products with pagination
+  const { products, total } = getProducts({
     brands: filters.brands,
     categories: filters.categories,
     priceMin: filters.priceMin,
     priceMax: filters.priceMax,
     sort: filters.sort,
+    page: filters.page || 1,
+    limit: PRODUCTS_PER_PAGE,
   });
 
-  const resultCount = products.length;
+  const currentPage = filters.page || 1;
+  const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
+  const resultCount = total;
 
   return (
     <>
@@ -109,8 +117,19 @@ async function ProductsContent({ searchParams }: ProductsPageProps) {
           {products.map((product) => {
             // Get the base variant for pricing
             const baseVariant = product.variants[0];
-            const displayPrice = baseVariant?.salePrice || baseVariant?.price;
             const colorCount = product.variants.length;
+
+            // Generate filter URLs for brand and category
+            const brandFilterQuery = addFilter(
+              searchParamsString,
+              "brands",
+              product.brandName
+            );
+            const categoryFilterQuery = addFilter(
+              searchParamsString,
+              "categories",
+              product.categoryName
+            );
 
             return (
               <Card
@@ -124,9 +143,12 @@ async function ProductsContent({ searchParams }: ProductsPageProps) {
                     : undefined
                 }
                 imageSrc={product.imageSrc}
-                price={displayPrice}
+                price={baseVariant?.price}
+                salePrice={baseVariant?.salePrice}
                 badge={product.badge}
                 href={`/products/${product.id}`}
+                descriptionHref={`/shop?${categoryFilterQuery}`}
+                subtitleHref={`/shop?${brandFilterQuery}`}
               />
             );
           })}
@@ -161,6 +183,15 @@ async function ProductsContent({ searchParams }: ProductsPageProps) {
             Clear All Filters
           </Link>
         </div>
+      )}
+
+      {/* Pagination */}
+      {products.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          searchParams={searchParamsString}
+        />
       )}
     </>
   );

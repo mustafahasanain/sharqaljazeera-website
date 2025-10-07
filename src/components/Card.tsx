@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,9 +13,12 @@ export interface CardProps {
   imageSrc: string;
   imageAlt?: string;
   price?: string | number;
+  salePrice?: string | number;
   href?: string;
   badge?: { label: string; tone?: BadgeTone };
   className?: string;
+  descriptionHref?: string;
+  subtitleHref?: string;
 }
 
 const toneToBg: Record<BadgeTone, string> = {
@@ -30,16 +35,26 @@ export default function Card({
   imageSrc,
   imageAlt = title,
   price,
+  salePrice,
   href,
   badge,
   className = "",
+  descriptionHref,
+  subtitleHref,
 }: CardProps) {
-  const displayPrice =
-    price === undefined
-      ? undefined
-      : typeof price === "number"
-      ? `$${price.toFixed(2)}`
-      : price;
+  const formatPrice = (p: string | number) =>
+    typeof p === "number" ? `$${p.toFixed(2)}` : p;
+
+  // Calculate discount percentage before formatting
+  const discountPercent =
+    price !== undefined && salePrice !== undefined
+      ? Math.round(((Number(price) - Number(salePrice)) / Number(price)) * 100)
+      : undefined;
+
+  const displayPrice = price !== undefined ? formatPrice(price) : undefined;
+  const displaySalePrice =
+    salePrice !== undefined ? formatPrice(salePrice) : undefined;
+
   const content = (
     <article
       className={`group flex h-full flex-col rounded-xl bg-light-100 ring-1 ring-light-300 transition-colors hover:ring-orange ${className}`}
@@ -52,20 +67,58 @@ export default function Card({
           sizes="(min-width: 1280px) 360px, (min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
+        {discountPercent && discountPercent > 0 && (
+          <div className="absolute left-3 top-3 rounded-lg bg-orange px-2.5 py-1 text-caption-medium text-white shadow-md">
+            -{discountPercent}%
+          </div>
+        )}
       </div>
       <div className="flex flex-1 flex-col p-4">
         <div className="mb-1 flex items-baseline justify-between gap-3">
           <h3 className="text-heading-3 text-dark-900">{title}</h3>
-          {displayPrice && (
-            <span className="text-body-medium text-dark-900">
-              {displayPrice}
-            </span>
+          {(displaySalePrice || displayPrice) && (
+            <div className="flex flex-col items-end gap-0.5">
+              {displaySalePrice ? (
+                <>
+                  <span className="text-body-medium text-dark-900">
+                    {displaySalePrice}
+                  </span>
+                  <span className="text-caption text-dark-500 line-through">
+                    {displayPrice}
+                  </span>
+                </>
+              ) : (
+                <span className="text-body-medium text-dark-900">
+                  {displayPrice}
+                </span>
+              )}
+            </div>
           )}
         </div>
-        {description && (
-          <p className="text-body text-dark-700">{description}</p>
-        )}
-        {subtitle && <p className="text-body text-dark-700">{subtitle}</p>}
+        {description &&
+          (descriptionHref ? (
+            <Link
+              href={descriptionHref}
+              onClick={(e) => e.stopPropagation()}
+              className="text-body text-dark-700 hover:text-orange transition-colors decoration-transparent hover:decoration-orange"
+            >
+              {description}
+            </Link>
+          ) : (
+            <p className="text-body text-dark-700">{description}</p>
+          ))}
+        {subtitle &&
+          (subtitleHref ? (
+            <Link
+              href={subtitleHref}
+              onClick={(e) => e.stopPropagation()}
+              className="text-body text-dark-700 hover:text-orange transition-colors decoration-transparent hover:decoration-orange"
+            >
+              {subtitle}
+            </Link>
+          ) : (
+            <p className="text-body text-dark-700">{subtitle}</p>
+          ))}
         {meta && (
           <p className="mt-1 text-caption text-dark-700">
             {Array.isArray(meta) ? meta.join(" • ") : meta}
