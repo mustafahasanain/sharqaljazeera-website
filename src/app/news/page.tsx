@@ -2,6 +2,11 @@ import { NewsCard } from "@/components";
 import { newsData } from "@/data/news";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "News",
+};
 
 export default function NewsPage() {
   // Get all news posts ordered by date (newest first)

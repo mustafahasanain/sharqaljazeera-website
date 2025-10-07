@@ -8,7 +8,10 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "Sharq Aljazeera Co.",
+  title: {
+    template: "%s - Sharq Aljazeera Co.",
+    default: "Sharq Aljazeera Co.",
+  },
   description:
     " Leading telecommunications company in Iraq since 2003. Expert in networking equipment, wireless solutions services.",
 };
