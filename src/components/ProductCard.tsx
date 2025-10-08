@@ -71,33 +71,75 @@ export default function ProductCard({
 
       {/* Content Section */}
       <div className="flex flex-col gap-2 p-4">
-        {/* Row 1: Title and Price */}
-        <div className="flex items-start justify-between gap-2">
+        {/* Desktop layout: Title and Price side by side */}
+        <div className="hidden sm:flex items-start justify-between gap-2">
           <h3 className="text-heading-3 text-dark-900">{title}</h3>
           <div className="flex-shrink-0 text-right mt-[5px]">
-            <span className="text-body-medium text-dark-900 whitespace-nowrap">
-              {displaySalePrice || displayPrice}
-            </span>
+            {displaySalePrice ? (
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="text-body-medium text-dark-900 whitespace-nowrap">
+                  {displaySalePrice}
+                </span>
+                <span className="text-caption text-dark-500 line-through">
+                  {displayPrice}
+                </span>
+              </div>
+            ) : (
+              <span className="text-body-medium text-dark-900 whitespace-nowrap">
+                {displayPrice}
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Row 2: Brand */}
+        {/* Desktop: Brand */}
         <Link
           href={brandHref}
           onClick={(e) => e.stopPropagation()}
-          className="text-body text-dark-700 hover:text-orange transition-colors w-fit"
+          className="hidden sm:block text-body text-dark-700 hover:text-orange transition-colors w-fit"
         >
           {brand}
         </Link>
 
-        {/* Row 3: Category */}
+        {/* Desktop: Category */}
         <Link
           href={categoryHref}
           onClick={(e) => e.stopPropagation()}
-          className="text-body text-dark-700 hover:text-orange transition-colors w-fit"
+          className="hidden sm:block text-body text-dark-700 hover:text-orange transition-colors w-fit"
         >
           {category}
         </Link>
+
+        {/* Mobile layout: Category, Title, Price stacked */}
+        <div className="flex sm:hidden flex-col gap-1">
+          {/* Category */}
+          <Link
+            href={categoryHref}
+            onClick={(e) => e.stopPropagation()}
+            className="text-[12px] text-dark-700 hover:text-orange transition-colors uppercase"
+          >
+            {category}
+          </Link>
+
+          {/* Title */}
+          <h3 className="text-body-medium text-dark-900">{title}</h3>
+
+          {/* Price */}
+          <div className="flex items-center gap-2">
+            {displaySalePrice ? (
+              <>
+                <span className="text-body text-dark-900">
+                  {displaySalePrice}
+                </span>
+                <span className="text-caption text-dark-500 line-through">
+                  {displayPrice}
+                </span>
+              </>
+            ) : (
+              <span className="text-body text-dark-900">{displayPrice}</span>
+            )}
+          </div>
+        </div>
       </div>
     </article>
   );

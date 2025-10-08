@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductVariant } from "@/components/ProductGallery";
 import ProductDetailsClient from "@/components/ProductDetailsClient";
-import Card from "@/components/Card";
+import ProductCard from "@/components/ProductCard";
 
 // Mock product data
 interface Product {
@@ -222,26 +222,24 @@ const RELATED_PRODUCTS = [
   {
     id: "2",
     title: "Nike Air Zoom",
-    description: "Men's Shoes",
-    meta: "4 Colour",
+    category: "Men's Shoes",
+    brand: "Nike",
     price: 129.99,
     imageSrc: "/products/product-2.png",
-    badge: { label: "Hot", tone: "red" as const },
   },
   {
     id: "3",
     title: "Nike InfinityRN 4",
-    description: "Men's Shoes",
-    meta: "6 Colour",
+    category: "Men's Shoes",
+    brand: "Nike",
     price: 159.99,
     imageSrc: "/products/product-3.png",
-    badge: { label: "Trending", tone: "orange" as const },
   },
   {
     id: "4",
     title: "Nike Metcon 9",
-    description: "Men's Shoes",
-    meta: "3 Colour",
+    category: "Men's Shoes",
+    brand: "Nike",
     price: 139.99,
     imageSrc: "/products/product-4.png",
   },
@@ -300,15 +298,16 @@ export default function ProductDetailPage({
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {RELATED_PRODUCTS.map((relatedProduct) => (
-            <Card
+            <ProductCard
               key={relatedProduct.id}
               title={relatedProduct.title}
-              description={relatedProduct.description}
-              meta={relatedProduct.meta}
+              category={relatedProduct.category}
+              brand={relatedProduct.brand}
               imageSrc={relatedProduct.imageSrc}
               price={relatedProduct.price}
               href={`/products/${relatedProduct.id}`}
-              badge={relatedProduct.badge}
+              categoryHref={`/shop?categories=${relatedProduct.category}`}
+              brandHref={`/shop?brands=${relatedProduct.brand}`}
             />
           ))}
         </div>

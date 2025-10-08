@@ -1,4 +1,4 @@
-import { Card } from "@/components";
+import ProductCard from "@/components/ProductCard";
 import HeroSlider from "@/components/HeroSlider";
 import { getCurrentUser } from "@/lib/auth/actions";
 import { getProducts } from "@/data/products";
@@ -18,14 +18,17 @@ const Home = async () => {
         </h2>
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((p) => (
-            <Card
+            <ProductCard
               key={p.id}
               title={p.name}
+              category={p.categoryName}
+              brand={p.brandName}
               imageSrc={p.imageSrc}
-              price={p.variants[0]?.salePrice || p.variants[0]?.price || 0}
-              badge={p.badge}
+              price={p.variants[0]?.price || 0}
+              salePrice={p.variants[0]?.salePrice}
               href={`/products/${p.id}`}
-              titleSize="small"
+              categoryHref={`/shop?categories=${p.categoryName}`}
+              brandHref={`/shop?brands=${p.brandName}`}
             />
           ))}
         </div>
