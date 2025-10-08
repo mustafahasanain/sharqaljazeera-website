@@ -58,3 +58,27 @@
   --text-footnote--line-height: 18px;
   --text-footnote--font-weight: 400;
 }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-light-200);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-site-blue);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dark-blue);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-site-blue) var(--color-light-200);
+}

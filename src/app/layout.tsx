@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import "./globals.css";
+import BackToTop from "@/components/BackToTop";
 
 const jost = Jost({
   variable: "--font-jost",
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${jost.className} antialiased`}>
         {children}
+        <BackToTop />
       </body>
     </html>
   );
