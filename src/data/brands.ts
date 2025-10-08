@@ -60,7 +60,7 @@ export const brandsData: BrandData[] = [
     id: "8",
     name: "COMMUNICATION ANTENNAS",
     slug: "communication-antennas",
-    logoSrc: "/brands/communication-antennas.png",
+    logoSrc: "/brands/sj.png",
   },
   {
     id: "9",
@@ -102,7 +102,7 @@ export const brandsData: BrandData[] = [
     id: "15",
     name: "TENDA",
     slug: "tenda",
-    logoSrc: "/brands/tenda.png",
+    logoSrc: "/brands/tenda.webp",
   },
 ];
 
@@ -124,7 +124,10 @@ export function getBrands(productCounts?: Record<string, number>): BrandData[] {
 /**
  * Get brand by slug
  */
-export function getBrandBySlug(slug: string, productCount?: number): BrandData | undefined {
+export function getBrandBySlug(
+  slug: string,
+  productCount?: number
+): BrandData | undefined {
   const brand = brandsData.find((brand) => brand.slug === slug);
   if (!brand) return undefined;
 

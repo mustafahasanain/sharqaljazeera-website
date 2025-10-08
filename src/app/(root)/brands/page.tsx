@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Card } from "@/components";
+import BrandCard from "@/components/BrandCard";
 import { getBrands, getBrandCount } from "@/data/brands";
 import { getProductCountsByBrand } from "@/data/products";
 
@@ -43,13 +43,11 @@ async function BrandsContent() {
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {brands.map((brand) => {
             return (
-              <Card
+              <BrandCard
                 key={brand.id}
-                title={brand.name}
-                description={`${brand.productCount || 0} ${
-                  brand.productCount === 1 ? "Product" : "Products"
-                }`}
+                brandName={brand.name}
                 imageSrc={brand.logoSrc}
+                productCount={brand.productCount || 0}
                 href={`/shop?brands=${brand.name}`}
               />
             );

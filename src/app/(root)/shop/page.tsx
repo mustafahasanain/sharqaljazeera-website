@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Card } from "@/components";
+import ProductCard from "@/components/ProductCard";
 import Filters from "@/components/Filters";
 import Sort from "@/components/Sort";
 import Pagination from "@/components/Pagination";
@@ -22,7 +22,7 @@ interface ProductsPageProps {
 // Loading component for Suspense
 function ProductsLoading() {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {[...Array(6)].map((_, i) => (
         <div
           key={i}
@@ -113,7 +113,7 @@ async function ProductsContent({ searchParams }: ProductsPageProps) {
 
       {/* Products grid */}
       {products.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => {
             // Get the base variant for pricing
             const baseVariant = product.variants[0];
@@ -132,23 +132,17 @@ async function ProductsContent({ searchParams }: ProductsPageProps) {
             );
 
             return (
-              <Card
+              <ProductCard
                 key={product.id}
                 title={product.name}
-                description={product.categoryName}
-                subtitle={product.brandName}
-                meta={
-                  colorCount > 1
-                    ? `${colorCount} ${colorCount === 1 ? "Color" : "Colors"}`
-                    : undefined
-                }
+                category={product.categoryName}
+                brand={product.brandName}
                 imageSrc={product.imageSrc}
-                price={baseVariant?.price}
+                price={baseVariant?.price || 0}
                 salePrice={baseVariant?.salePrice}
-                badge={product.badge}
                 href={`/products/${product.id}`}
-                descriptionHref={`/shop?${categoryFilterQuery}`}
-                subtitleHref={`/shop?${brandFilterQuery}`}
+                categoryHref={`/shop?${categoryFilterQuery}`}
+                brandHref={`/shop?${brandFilterQuery}`}
               />
             );
           })}

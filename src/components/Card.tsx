@@ -7,9 +7,9 @@ export type BadgeTone = "red" | "green" | "orange";
 
 export interface CardProps {
   title: string;
-  description?: string;
-  subtitle?: string;
-  meta?: string | string[];
+  category?: string;
+  brand?: string;
+  // meta?: string | string[];
   imageSrc: string;
   imageAlt?: string;
   price?: string | number;
@@ -17,8 +17,9 @@ export interface CardProps {
   href?: string;
   badge?: { label: string; tone?: BadgeTone };
   className?: string;
-  descriptionHref?: string;
-  subtitleHref?: string;
+  categoryHref?: string;
+  brandHref?: string;
+  titleSize?: "small" | "default";
 }
 
 const toneToBg: Record<BadgeTone, string> = {
@@ -29,9 +30,9 @@ const toneToBg: Record<BadgeTone, string> = {
 
 export default function Card({
   title,
-  description,
-  subtitle,
-  meta,
+  category,
+  brand,
+  // meta,
   imageSrc,
   imageAlt = title,
   price,
@@ -39,8 +40,9 @@ export default function Card({
   href,
   badge,
   className = "",
-  descriptionHref,
-  subtitleHref,
+  categoryHref,
+  brandHref,
+  titleSize = "default",
 }: CardProps) {
   const formatPrice = (p: string | number) =>
     typeof p === "number" ? `$${p.toFixed(2)}` : p;
@@ -75,7 +77,7 @@ export default function Card({
       </div>
       <div className="flex flex-1 flex-col p-4">
         <div className="mb-1 flex items-baseline justify-between gap-3">
-          <h3 className="text-heading-3 text-dark-900">{title}</h3>
+          <h3 className={`${titleSize === "small" ? "text-body-medium" : "text-heading-3"} text-dark-900`}>{title}</h3>
           {(displaySalePrice || displayPrice) && (
             <div className="flex flex-col items-end gap-0.5">
               {displaySalePrice ? (
@@ -95,35 +97,35 @@ export default function Card({
             </div>
           )}
         </div>
-        {description &&
-          (descriptionHref && !href ? (
+        {category &&
+          (categoryHref ? (
             <Link
-              href={descriptionHref}
+              href={categoryHref}
               onClick={(e) => e.stopPropagation()}
-              className="text-body text-dark-700 hover:text-orange transition-colors decoration-transparent hover:decoration-orange"
+              className="text-body text-dark-700 hover:text-orange transition-colors underline decoration-transparent hover:decoration-orange"
             >
-              {description}
+              {category}
             </Link>
           ) : (
-            <p className="text-body text-dark-700">{description}</p>
+            <p className="text-body text-dark-700">{category}</p>
           ))}
-        {subtitle &&
-          (subtitleHref && !href ? (
+        {brand &&
+          (brandHref ? (
             <Link
-              href={subtitleHref}
+              href={brandHref}
               onClick={(e) => e.stopPropagation()}
-              className="text-body text-dark-700 hover:text-orange transition-colors decoration-transparent hover:decoration-orange"
+              className="text-body text-dark-700 hover:text-orange transition-colors underline decoration-transparent hover:decoration-orange"
             >
-              {subtitle}
+              {brand}
             </Link>
           ) : (
-            <p className="text-body text-dark-700">{subtitle}</p>
+            <p className="text-body text-dark-700">{brand}</p>
           ))}
-        {meta && (
+        {/* {meta && (
           <p className="mt-1 text-caption text-dark-700">
             {Array.isArray(meta) ? meta.join(" • ") : meta}
           </p>
-        )}
+        )} */}
       </div>
     </article>
   );
