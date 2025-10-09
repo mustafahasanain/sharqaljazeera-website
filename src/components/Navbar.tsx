@@ -16,7 +16,7 @@ export default function Navbar({ logoSrc = "/next.svg" }: NavbarProps) {
   const navLinks = [
     { label: "HOME", href: "/" },
     { label: "NEWS", href: "/news" },
-    { label: "OFFERS", href: "#" },
+    { label: "OFFERS", href: "/offers" },
     { label: "SHOP", href: "/shop" },
     { label: "BRANDS", href: "/brands" },
   ];
