@@ -9,14 +9,14 @@ import styles from "./HeroSlider.module.css";
 
 export default function HeroSlider() {
   const slides = [
-    "/hero-sliders-img/hero-1.jpg",
-    "/hero-sliders-img/hero-2.jpg",
-    "/hero-sliders-img/hero-3.jpg",
-    "/hero-sliders-img/hero-4.jpg",
-    "/hero-sliders-img/hero-5.jpg",
-    "/hero-sliders-img/hero-6.jpg",
-    "/hero-sliders-img/hero-7.jpg",
-    "/hero-sliders-img/hero-8.jpg",
+    "/sliders/hero-1.jpg",
+    "/sliders/hero-2.jpg",
+    "/sliders/hero-3.jpg",
+    "/sliders/hero-4.jpg",
+    "/sliders/hero-5.jpg",
+    "/sliders/hero-6.jpg",
+    "/sliders/hero-7.jpg",
+    "/sliders/hero-8.jpg",
   ];
 
   return (
