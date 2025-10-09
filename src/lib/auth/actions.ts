@@ -68,18 +68,23 @@ export async function signUp(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const data = signUpSchema.parse(rawData);
+  try {
+    const data = signUpSchema.parse(rawData);
 
-  const res = await auth.api.signUpEmail({
-    body: {
-      email: data.email,
-      password: data.password,
-      name: data.name,
-    },
-  });
+    const res = await auth.api.signUpEmail({
+      body: {
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      },
+    });
 
-  await migrateGuestToUser();
-  return { ok: true, userId: res.user?.id };
+    await migrateGuestToUser();
+    return { ok: true, userId: res.user?.id };
+  } catch (error: any) {
+    console.error("Sign up error:", error);
+    return { ok: false, error: error.message || "Failed to create account. Please try again." };
+  }
 }
 
 const signInSchema = z.object({

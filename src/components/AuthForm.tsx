@@ -32,10 +32,11 @@ export default function AuthForm({ mode, onSubmit }: AuthFormProps) {
       } else if (result?.error) {
         setError(result.error);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log("error", e);
-      // setError("An unexpected error occurred. Please try again.");
-      setError("This email is already registered.");
+      // Extract the actual error message from the exception
+      const errorMessage = e?.message || "An unexpected error occurred. Please try again.";
+      setError(errorMessage);
     }
   };
 
