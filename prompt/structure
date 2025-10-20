@@ -1,0 +1,297 @@
+project-root/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/                             # Authentication routes
+│   │   │   ├── login/
+│   │   │   │   └── page.tsx
+│   │   │   ├── register/
+│   │   │   │   └── page.tsx
+│   │   │   ├── reset-password/                 # Password reset flow
+│   │   │   │   ├── page.tsx                   # Request reset
+│   │   │   │   └── confirm/
+│   │   │   │       └── page.tsx               # Token validation & new password
+│   │   │   └── layout.tsx
+│   │
+│   │   ├── (shop)/                             # Main shop section
+│   │   │   ├── products/
+│   │   │   │   ├── [slug]/page.tsx            # Product detail
+│   │   │   │   └── page.tsx                   # Product listing
+│   │   │   ├── brands/
+│   │   │   │   ├── [brandId]/page.tsx         # Brand products
+│   │   │   │   └── page.tsx                   # All brands
+│   │   │   ├── categories/
+│   │   │   │   ├── [...slug]/page.tsx         # Nested categories
+│   │   │   │   └── page.tsx
+│   │   │   ├── cart/page.tsx
+│   │   │   ├── favorites/page.tsx             # (Legacy, now wishlist)
+│   │   │   └── layout.tsx
+│   │
+│   │   ├── (marketing)/                        # Marketing content
+│   │   │   ├── offers/page.tsx
+│   │   │   ├── news/
+│   │   │   │   ├── [id]/page.tsx
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx
+│   │
+│   │   ├── (user)/                             # User account
+│   │   │   ├── account/
+│   │   │   │   ├── page.tsx                   # Dashboard
+│   │   │   │   ├── orders/
+│   │   │   │   │   ├── page.tsx               # Orders list
+│   │   │   │   │   └── [orderId]/
+│   │   │   │   │       ├── page.tsx           # Order details
+│   │   │   │   │       └── receipt/page.tsx   # PDF receipt
+│   │   │   │   ├── addresses/
+│   │   │   │   │   ├── page.tsx               # Manage addresses
+│   │   │   │   │   └── new/page.tsx           # Add new address
+│   │   │   │   ├── details/page.tsx           # Edit profile & password
+│   │   │   │   └── wishlist/page.tsx          # Wishlist items
+│   │   │   └── layout.tsx                     # Protected layout
+│   │
+│   │   ├── (info)/                            # Info pages
+│   │   │   ├── about/page.tsx
+│   │   │   ├── contact/page.tsx
+│   │   │   ├── faq/page.tsx
+│   │   │   ├── privacy/page.tsx
+│   │   │   ├── terms/page.tsx
+│   │   │   └── layout.tsx
+│   │
+│   │   ├── (checkout)/                        # Checkout flow
+│   │   │   ├── checkout/
+│   │   │   │   ├── page.tsx                   # Main checkout
+│   │   │   │   ├── shipping/page.tsx
+│   │   │   │   ├── payment/page.tsx
+│   │   │   │   └── confirm/page.tsx
+│   │   │   └── layout.tsx
+│   │
+│   │   ├── api/                               # API routes
+│   │   │   ├── auth/
+│   │   │   │   ├── [...all]/route.ts
+│   │   │   │   ├── reset-password/
+│   │   │   │   │   ├── request/route.ts
+│   │   │   │   │   └── confirm/route.ts
+│   │   │   │   └── signout/route.ts
+│   │   │   ├── user/
+│   │   │   │   ├── profile/route.ts
+│   │   │   │   ├── password/route.ts
+│   │   │   │   └── addresses/
+│   │   │   │       ├── route.ts
+│   │   │   │       └── [id]/route.ts
+│   │   │   ├── products/
+│   │   │   │   ├── route.ts
+│   │   │   │   ├── [id]/route.ts
+│   │   │   │   └── search/route.ts
+│   │   │   ├── brands/route.ts
+│   │   │   ├── categories/route.ts
+│   │   │   ├── cart/route.ts
+│   │   │   ├── wishlist/
+│   │   │   │   ├── route.ts
+│   │   │   │   └── [productId]/route.ts
+│   │   │   ├── orders/
+│   │   │   │   ├── route.ts
+│   │   │   │   └── [orderId]/
+│   │   │   │       ├── route.ts
+│   │   │   │       └── receipt/route.ts
+│   │   │   ├── payment/
+│   │   │   │   ├── cod/route.ts
+│   │   │   │   ├── qicard/
+│   │   │   │   │   ├── route.ts
+│   │   │   │   │   └── callback/route.ts
+│   │   │   │   ├── zaincash/
+│   │   │   │   │   ├── route.ts
+│   │   │   │   │   └── callback/route.ts
+│   │   │   │   └── verify/route.ts
+│   │   │   ├── shipping/
+│   │   │   │   ├── calculate/route.ts
+│   │   │   │   └── governorates/route.ts
+│   │   │   ├── contact/route.ts
+│   │   │   └── webhook/stripe/route.ts
+│   │
+│   │   ├── layout.tsx                          # Root layout
+│   │   ├── page.tsx                            # Homepage
+│   │   └── globals.css
+│
+│   ├── components/
+│   │   ├── ui/
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── dropdown.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── skeleton.tsx
+│   │   │   └── toast.tsx
+│   │   ├── layout/
+│   │   │   ├── header.tsx
+│   │   │   ├── footer.tsx
+│   │   │   ├── nav-menu.tsx
+│   │   │   └── mobile-nav.tsx
+│   │   ├── shared/
+│   │   │   ├── brand-card.tsx
+│   │   │   ├── category-tree.tsx
+│   │   │   ├── search-bar.tsx
+│   │   │   └── pagination.tsx
+│   │   ├── product/
+│   │   │   ├── product-card.tsx
+│   │   │   ├── product-grid.tsx
+│   │   │   ├── product-filters.tsx
+│   │   │   ├── product-sort.tsx
+│   │   │   ├── product-variants.tsx
+│   │   │   └── product-gallery.tsx
+│   │   ├── cart/
+│   │   │   ├── cart-item.tsx
+│   │   │   ├── cart-summary.tsx
+│   │   │   └── cart-sheet.tsx
+│   │   ├── checkout/
+│   │   │   ├── payment-methods.tsx
+│   │   │   ├── shipping-selector.tsx
+│   │   │   ├── order-summary.tsx
+│   │   │   └── checkout-steps.tsx
+│   │   └── info/
+│   │       ├── contact-form.tsx
+│   │       ├── faq-accordion.tsx
+│   │       └── about-sections.tsx
+│
+│   ├── lib/
+│   │   ├── auth/
+│   │   │   ├── index.ts
+│   │   │   └── client.ts
+│   │   ├── db/
+│   │   │   ├── index.ts
+│   │   │   ├── migrate.ts
+│   │   │   └── seed.ts
+│   │   ├── api/
+│   │   │   ├── client.ts
+│   │   │   └── endpoints.ts
+│   │   ├── utils/
+│   │   │   ├── cn.ts
+│   │   │   ├── format.ts
+│   │   │   └── validators.ts
+│   │   ├── payment/
+│   │   │   ├── providers/
+│   │   │   │   ├── cod.ts
+│   │   │   │   ├── qicard.ts
+│   │   │   │   └── zaincash.ts
+│   │   │   ├── payment-factory.ts
+│   │   │   └── types.ts
+│   │   ├── shipping/
+│   │   │   ├── calculator.ts
+│   │   │   └── governorates.ts
+│   │   └── currency/
+│   │       └── iqd-formatter.ts
+│
+│   ├── db/
+│   │   ├── schema/
+│   │   │   ├── products.ts
+│   │   │   ├── brands.ts
+│   │   │   ├── categories.ts
+│   │   │   ├── users.ts
+│   │   │   ├── orders.ts
+│   │   │   ├── carts.ts
+│   │   │   ├── favorites.ts
+│   │   │   └── index.ts
+│   │   ├── queries/
+│   │   │   ├── products.ts
+│   │   │   ├── brands.ts
+│   │   │   ├── categories.ts
+│   │   │   ├── users.ts
+│   │   │   └── orders.ts
+│   │   └── migrations/
+│
+│   ├── store/
+│   │   ├── cart.ts
+│   │   ├── favorites.ts
+│   │   ├── filters.ts
+│   │   ├── auth.ts
+│   │   └── index.ts
+│
+│   ├── services/
+│   │   ├── product.service.ts
+│   │   ├── brand.service.ts
+│   │   ├── category.service.ts
+│   │   ├── cart.service.ts
+│   │   ├── order.service.ts
+│   │   └── user.service.ts
+│
+│   ├── types/
+│   │   ├── product.ts
+│   │   ├── brand.ts
+│   │   ├── category.ts
+│   │   ├── user.ts
+│   │   ├── order.ts
+│   │   ├── api.ts
+│   │   ├── payment.ts
+│   │   └── shipping.ts
+│
+│   ├── hooks/
+│   │   ├── use-products.ts
+│   │   ├── use-cart.ts
+│   │   ├── use-favorites.ts
+│   │   ├── use-auth.ts
+│   │   ├── use-debounce.ts
+│   │   └── use-wishlist.ts
+│
+│   ├── data/
+│   │   ├── faq.ts
+│   │   └── governorates.ts
+│
+│   └── middleware.ts
+│
+├── public/
+│   ├── images/
+│   │   ├── products/
+│   │   │   ├── by-sku/
+│   │   │   │   ├── PRD-001/
+│   │   │   │   │   ├── main.webp
+│   │   │   │   │   ├── thumb.webp
+│   │   │   │   │   ├── gallery-1.webp
+│   │   │   │   │   ├── gallery-2.webp
+│   │   │   │   │   └── variants/
+│   │   │   │   │       ├── red.webp
+│   │   │   │   │       └── blue.webp
+│   │   │   │   └── PRD-002/
+│   │   │   │       └── ...
+│   │   │   └── optimized/
+│   │   │       ├── 200/
+│   │   │       ├── 400/
+│   │   │       ├── 800/
+│   │   │       └── 1200/
+│   │   ├── brands/
+│   │   └── categories/
+│   └── fonts/
+│
+├── scripts/
+│   ├── migrate.ts
+│   ├── seed.ts
+│   └── sync-images.ts
+│
+├── drizzle/
+│   └── drizzle.config.ts
+|
+├── __tests__/
+│   ├── unit/
+|   |    └── services/
+|   |    └── lib/
+│   ├── integration/
+|   |    └── api/
+|   |    └── db/
+│   └── e2e/    
+|        └── checkout.spec.ts
+│
+├── .github/
+│   ├── workflows/
+|   |    └── ci.yml
+|        └── deploy.yml
+├── docker/
+|   |    └── Dockerfile
+|        └── docker-compose.yml
+├── docs/  
+|        └── API.md
+|        └── DEPLOYMENT.md
+|        └── ARCHITECTURE.md
+|
+├── .env.local
+├── .eslintrc.json
+├── tailwind.config.ts
+├── tsconfig.json
+├── next.config.ts
+└── package.json
