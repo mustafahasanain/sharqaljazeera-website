@@ -147,7 +147,7 @@ describe("Database Relations & Joins", () => {
 
   describe("User Relations", () => {
     it("should query user with addresses", async () => {
-      // Add addresses
+      // Add addresses (note: 1 address already created in beforeEach)
       await db.insert(addresses).values([
         createAddressData(testUser.id, { type: "home" }),
         createAddressData(testUser.id, { type: "work" }),
@@ -158,7 +158,7 @@ describe("Database Relations & Joins", () => {
         .from(addresses)
         .where(eq(addresses.userId, testUser.id));
 
-      expect(result.length).toBe(2);
+      expect(result.length).toBe(3); // 1 from beforeEach + 2 from this test
       expect(result[0].userId).toBe(testUser.id);
     });
 
@@ -307,20 +307,23 @@ describe("Database Relations & Joins", () => {
         )
         .returning();
 
-      // Query child with parent
-      const result = await db
-        .select({
-          child: categories,
-          parent: categories,
-        })
+      // Verify the child category
+      const [child] = await db
+        .select()
         .from(categories)
-        .innerJoin(
-          categories as any,
-          eq((categories as any).id, (categories as any).parentId)
-        )
         .where(eq(categories.id, smartphones.id));
 
+      // Verify the parent category
+      const [parent] = await db
+        .select()
+        .from(categories)
+        .where(eq(categories.id, electronics.id));
+
       // The test verifies the relationship exists
+      expect(child).toBeDefined();
+      expect(parent).toBeDefined();
+      expect(child.parentId).toBe(parent.id);
+      expect(child.path).toContain(parent.id);
       expect(smartphones.parentId).toBe(electronics.id);
       expect(smartphones.path).toContain(electronics.id);
     });

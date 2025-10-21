@@ -11,6 +11,20 @@ export async function initializeTestDatabase(): Promise<void> {
     if (!isConnected) {
       throw new Error("Failed to connect to test database");
     }
+
+    // Add missing unique constraint for favorites table
+    // This ensures (userId, productId) is unique even when variantId is NULL
+    try {
+      await db.execute(sql`
+        CREATE UNIQUE INDEX IF NOT EXISTS favorites_user_product_idx
+        ON favorites (user_id, product_id)
+      `);
+    } catch (error: any) {
+      // Ignore if index already exists
+      if (!error.message?.includes("already exists")) {
+        console.warn("Warning: Could not create favorites_user_product_idx:", error.message);
+      }
+    }
   } catch (error) {
     console.error("Failed to initialize test database:", error);
     throw error;

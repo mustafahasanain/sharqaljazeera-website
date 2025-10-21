@@ -37,6 +37,11 @@ export const favorites = pgTable(
     userIdIdx: index("favorites_user_id_idx").on(table.userId),
     productIdIdx: index("favorites_product_id_idx").on(table.productId),
     variantIdIdx: index("favorites_variant_id_idx").on(table.variantId),
+    // Unique constraint: one product per user (when no variant specified)
+    userProductIdx: uniqueIndex("favorites_user_product_idx").on(
+      table.userId,
+      table.productId
+    ),
     // Unique constraint: one product/variant combo per user
     userProductVariantIdx: uniqueIndex("favorites_user_product_variant_idx").on(
       table.userId,

@@ -11,8 +11,7 @@ beforeAll(async () => {
 // Global test teardown - runs once after all tests
 afterAll(async () => {
   console.log("🧹 Cleaning up test database...");
-  // Uncomment the line below if you want to clean up after all tests
-  // await cleanupTestDatabase();
+  await cleanupTestDatabase();
   console.log("✅ Test cleanup completed");
 });
 

@@ -311,13 +311,15 @@ describe("Database Constraints & Validation", () => {
 
       try {
         await transaction(async (tx) => {
-          await tx.insert(users).values(createUserData());
-          await tx.insert(users).values(createUserData());
+          // Insert first user with specific email
+          await tx.insert(users).values(createUserData({ email: "test1@rollback.com" }));
+          // Insert second user with different email
+          await tx.insert(users).values(createUserData({ email: "test2@rollback.com" }));
 
-          // This should cause an error (duplicate email)
+          // This should cause an error (duplicate email from first insert)
           await tx
             .insert(users)
-            .values(createUserData({ email: initialCount[0]?.email || "test@test.com" }));
+            .values(createUserData({ email: "test1@rollback.com" }));
         });
       } catch (error) {
         // Expected to fail
