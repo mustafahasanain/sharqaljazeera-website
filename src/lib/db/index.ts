@@ -4,9 +4,6 @@ import { PgTransaction } from "drizzle-orm/pg-core";
 import { NeonQueryResultHKT } from "drizzle-orm/neon-serverless";
 import { ExtractTablesWithRelations } from "drizzle-orm";
 import * as schema from "@/db/schema";
-import * as dotenv from "dotenv";
-
-dotenv.config({ path: ".env.local" });
 
 // Database connection configuration
 const getDatabaseUrl = (): string => {
