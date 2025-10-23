@@ -16,10 +16,12 @@ Define and implement all TypeScript type definitions for the e-commerce platform
 
 ## Tasks
 
-Create: Currency & Regional Data
+Create Middleware
 
-src/lib/currency/iqd-formatter.ts - IQD currency formatter
-src/data/governorates.ts - Iraq governorates data
+Create:
+1- src/middleware.ts - Route protection and authentication checks
+2- src/lib/middleware/auth.ts - Auth middleware helpers
+3- src/lib/middleware/rate-limit.ts - Rate limiting
 
 ## Output Requirements
 
