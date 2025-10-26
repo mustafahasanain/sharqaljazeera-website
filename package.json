@@ -44,6 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^8.13.0",
     "@typescript-eslint/parser": "^8.13.0",
     "@vitest/ui": "^3.2.4",
+    "drizzle-kit": "^0.31.5",
     "eslint": "^9.15.0",
     "eslint-config-next": "15.5.6",
     "eslint-config-prettier": "^9.1.0",
